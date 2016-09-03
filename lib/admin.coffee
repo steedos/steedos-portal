@@ -21,6 +21,5 @@ if Meteor.isClient
     Meteor.startup ->
         Tracker.autorun ->
             if Meteor.userId() and Session.get("spaceId")
-                # db.portal_dashboards.adminConfig.routerAdmin = "/dashboards/"
                 AdminTables["portal_dashboards"]?.selector = {space: Session.get("spaceId")}
                     

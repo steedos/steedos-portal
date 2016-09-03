@@ -17,22 +17,22 @@ db.portal_dashboards._simpleSchema = new SimpleSchema
 
 	description: 
 		type: String,
-		optional: false,
+		optional: true,
 		autoform: 
 			rows: 10,
 			order: 30
 	
 	icon:
 		type: String,
-		optional: true
+		optional: false
 		autoform:
-			omit: true
+			omit: false
 		
 	widgets: 
 		type: [String],
 		optional: true,
 		autoform:
-			omit: true
+			omit: false
 			type: "select"
 			multiple: true
 
@@ -63,78 +63,23 @@ db.portal_dashboards.attachSchema(db.portal_dashboards._simpleSchema)
 
 
 
-# if Meteor.isServer
+if Meteor.isServer
 	
-# 	db.portal_dashboards.before.insert (userId, doc) ->
-
-# 		doc.created_by = userId
-# 		doc.created = new Date()
-# 		doc.modified_by = userId
-# 		doc.modified = new Date()
+	db.portal_dashboards.before.insert (userId, doc) ->
+		doc.created_by = userId
+		doc.created = new Date()
+		doc.modified_by = userId
+		doc.modified = new Date()
 		
-# 		if !userId
-# 			throw new Meteor.Error(400, t("portal_dashboards_error.login_required"));
-		
-# 		if !doc.postDate
-# 			doc.postDate = new Date()
-
-# 		# 暂时默认为已核准
-# 		doc.status = db.portal_dashboards.config.STATUS_APPROVED
-# 		doc.author = userId
-# 		user = db.users.findOne({_id: userId})
-# 		if user
-# 			doc.author_name = user.name
-# 		doc.summary = doc.body.substring(0, 400)
-
-# 		# pick images from attachments 
-# 		if doc and doc.attachments
-# 			doc.attachments = _.compact(doc.attachments)
-# 			atts = cfs.posts.find({_id: {$in: doc.attachments}}).fetch()
-# 			doc.images = []
-# 			_.each atts, (att)->
-# 				if att.isImage()
-# 					doc.images.push att._id
+		if !userId
+			throw new Meteor.Error(400, t("portal_dashboards_error.login_required"));
 
 
-# 	db.portal_dashboards.after.insert (userId, doc) ->
-# 		# update cfs meta
-# 		if doc and doc.attachments
-# 			cfs.posts.update {_id: {$in: doc.attachments}}, {
-# 				$set: 
-# 					site: doc.site
-# 					post: doc._id
-# 			}, {multi: true}
-# 			cfs.posts.remove {post: doc._id, _id: {$not: {$in: doc.attachments}}}
-	
+	db.portal_dashboards.before.update (userId, doc, fieldNames, modifier, options) ->
+		modifier.$set = modifier.$set || {};
 
-# 	db.portal_dashboards.before.update (userId, doc, fieldNames, modifier, options) ->
-# 		modifier.$set = modifier.$set || {};
-
-# 		modifier.$set.modified_by = userId;
-# 		modifier.$set.modified = new Date();
-
-# 		# pick images from attachments 
-# 		if modifier.$set.attachments
-# 			modifier.$set.attachments = _.compact(modifier.$set.attachments)
-# 			atts = cfs.posts.find({_id: {$in: modifier.$set.attachments}}).fetch()
-# 			modifier.$set.images = []
-# 			_.each atts, (att)->
-# 				if att.isImage()
-# 					modifier.$set.images.push att._id
-
-# 		if modifier.$set.body 
-# 			modifier.$set.summary = modifier.$set.body.substring(0, 400)
+		modifier.$set.modified_by = userId;
+		modifier.$set.modified = new Date();
 
 
-# 	db.portal_dashboards.after.update (userId, doc, fieldNames, modifier, options) ->
-# 		self = this
-# 		modifier.$set = modifier.$set || {}
 
-# 		# update cfs meta
-# 		if modifier.$set and modifier.$set.attachments
-# 			cfs.posts.update {_id: {$in: modifier.$set.attachments}}, {
-# 				$set: 
-# 					site: doc.site
-# 					post: doc._id
-# 			}, {multi: true}
-# 			cfs.posts.remove {post: doc._id, _id: {$not: {$in: modifier.$set.attachments}}}
