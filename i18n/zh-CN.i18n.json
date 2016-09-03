@@ -8,6 +8,12 @@
     "portal_button_edit": "编辑",
     "portal_button_admin": "设置",
     "portal_button_back": "返回",
-    
+
+    "portal_dashboards": "面板",
+    "portal_dashboards_name": "名称",
+    "portal_dashboards_description": "描述",
+    "portal_dashboards_icon": "图标",
+    "portal_dashboards_modified": "修改时间",
+
     "Help": "帮助"
 }

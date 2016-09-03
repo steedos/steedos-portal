@@ -8,7 +8,7 @@ db.portal_dashboards.adminConfig =
         {name: "modified"},
     ]
     selector: {space: -1}
-    routerAdmin: "/portal"
+    routerAdmin: "/portal/admin"
 
 Meteor.startup ->
 
@@ -21,6 +21,6 @@ if Meteor.isClient
     Meteor.startup ->
         Tracker.autorun ->
             if Meteor.userId() and Session.get("spaceId")
-                db.portal_dashboards.adminConfig.routerAdmin = "/dashboards/"
+                # db.portal_dashboards.adminConfig.routerAdmin = "/dashboards/"
                 AdminTables["portal_dashboards"]?.selector = {space: Session.get("spaceId")}
                     
