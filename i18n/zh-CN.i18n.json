@@ -1,0 +1,14 @@
+{
+    "Steedos Portal": "门户",
+
+    "portal_admin_home": "门户设置",
+    "portal_dashboard_settings": "面板设置", 
+    "portal_widget_settings": "窗体设置",
+    "portal_button_new": "发布",
+    "portal_button_edit": "编辑",
+    "portal_button_admin": "设置",
+    "portal_button_back": "返回",
+
+    
+    "Help": "帮助",
+}

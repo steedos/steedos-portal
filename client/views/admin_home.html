@@ -1,0 +1,59 @@
+<template name="portal_admin_home">
+
+	<div class="navigation-bar">
+
+        <button type="button" class="btn btn-default" data-toggle="offcanvas">
+            <i class="fa fa-bars"></i>
+        </button>
+
+		<span class="navigation-title dropdown">
+			{{_ "portal_admin_home"}}
+		</span>
+		<div class="pull-right">
+		</div>
+	</div>
+	<div class="cell content">
+
+		<div class="bd">
+			<div class="weui_cells weui_cells_access">
+				<a class="weui_cell navigation" href="/steedos/profile/">
+					<div class="weui_cell_hd"><i class="ion ion-android-person"></i></div>
+					<div class="weui_cell_bd weui_cell_primary">
+						&nbsp;{{_ "portal_dashboard_settings"}}
+					</div>
+					<div class="weui_cell_ft">
+					</div>
+				</a>
+			</div>
+		</div>
+
+		<div class="bd">
+			<div class="weui_cells weui_cells_access">
+				<a class="weui_cell navigation" href="/steedos/profile/">
+					<div class="weui_cell_hd"><i class="ion ion-android-person"></i></div>
+					<div class="weui_cell_bd weui_cell_primary">
+						&nbsp;{{_ "portal_widget_settings"}}
+					</div>
+					<div class="weui_cell_ft">
+					</div>
+				</a>
+			</div>
+		</div>
+		
+		<div class="bd">
+			<div class="weui_cells weui_cells_access">
+				<a class="weui_cell" href="/steedos/help">
+					<div class="weui_cell_hd"><i class="ion ion-help-circled"></i></div>
+					<div class="weui_cell_bd weui_cell_primary">
+						&nbsp;{{_ "Help"}}
+					</div>
+					<div class="weui_cell_ft">
+					</div>
+				</a>
+			</div>
+		</div>
+
+
+	</div>
+
+</template>
