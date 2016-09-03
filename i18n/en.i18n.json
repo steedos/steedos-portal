@@ -13,6 +13,7 @@
     "portal_dashboards_name": "名称",
     "portal_dashboards_description": "描述",
     "portal_dashboards_icon": "图标",
+    "portal_dashboards_widgets": "窗体",
     "portal_dashboards_modified": "修改时间",
 
     "portal_widgets": "窗体",

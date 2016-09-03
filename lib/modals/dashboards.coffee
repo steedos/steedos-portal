@@ -35,6 +35,23 @@ db.portal_dashboards._simpleSchema = new SimpleSchema
 			omit: false
 			type: "select"
 			multiple: true
+			defaultValue: ->
+				return []
+			# options: ->
+			# 	options = []
+			# 	objs = db.portal_widgets.find({}, {})
+			# 	objs.forEach (obj) ->
+			# 		options.push
+			# 			label: obj.name,
+			# 			value: obj._id
+			# 	return options
+			options:  () ->
+				options = db.portal_widgets.find().map (widget) ->
+					return {
+						value: widget._id,
+						label: widget.name
+					}
+				return options;
 
 	created: 
 		type: Date,
