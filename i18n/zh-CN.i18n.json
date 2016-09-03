@@ -15,5 +15,17 @@
     "portal_dashboards_icon": "图标",
     "portal_dashboards_modified": "修改时间",
 
+    "portal_widgets": "窗体",
+    "portal_widgets_name": "名称",
+    "portal_widgets_title": "标题",
+    "portal_widgets_description": "描述",
+    "portal_widgets_icon": "图标",
+    "portal_widgets_template": "模板",
+    "portal_widgets_cols": "列数",
+    "portal_widgets_data": "数据源",
+    "portal_widgets_onData": "数据源加载后事件",
+    "portal_widgets_onRendered": "窗体加载后事件",
+    "portal_widgets_modified": "修改时间",
+
     "Help": "帮助"
 }

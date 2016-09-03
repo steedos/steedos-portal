@@ -7,9 +7,3 @@ FlowRouter.route '/portal/admin',
         if Meteor.userId()
             BlazeLayout.render 'masterLayout',
                 main: "portal_admin_home"
-
-# FlowRouter.route '/portal/admin/dashboards', 
-#     action: (params, queryParams)->
-#         if Meteor.userId()
-#             BlazeLayout.render 'masterLayout',
-#                 main: "portal_admin_dashboards"

@@ -56,6 +56,7 @@ Package.onUse(function(api) {
 
     api.addFiles('lib/core.coffee');
     api.addFiles('lib/modals/dashboards.coffee');
+    api.addFiles('lib/modals/widgets.coffee');
     api.addFiles('lib/admin.coffee');
 
     api.addFiles('client/views/admin_home.coffee', 'client');
@@ -67,6 +68,7 @@ Package.onUse(function(api) {
 
 
     api.addFiles('server/publications/portal_dashboards.coffee', 'server');
+    api.addFiles('server/publications/portal_widgets.coffee', 'server');
 
     // EXPORT
     api.export('Portal');
