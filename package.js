@@ -59,9 +59,12 @@ Package.onUse(function(api) {
     api.addFiles('lib/modals/widgets.coffee');
     api.addFiles('lib/admin.coffee');
 
-    api.addFiles('client/views/admin_home.coffee', 'client');
     api.addFiles('client/views/admin_home.html', 'client');
+    api.addFiles('client/views/admin_home.coffee', 'client');
     api.addFiles('client/views/admin_home.less', 'client');
+    api.addFiles('client/views/portal_home.html', 'client');
+    api.addFiles('client/views/portal_home.coffee', 'client');
+    api.addFiles('client/views/portal_home.less', 'client');
 
     api.addFiles('client/router.coffee', 'client');
     api.addFiles('client/subscribe.coffee', 'client');
