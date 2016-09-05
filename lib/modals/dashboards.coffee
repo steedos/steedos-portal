@@ -33,7 +33,7 @@ db.portal_dashboards._simpleSchema = new SimpleSchema
 		optional: true,
 		autoform:
 			omit: false
-			type: "select"
+			type: "selectize"
 			multiple: true
 			defaultValue: ->
 				return []
