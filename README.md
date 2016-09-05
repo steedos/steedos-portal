@@ -15,6 +15,7 @@ portal_dashboards
 
 portal_widgets
 {
+	space: "",
 	name: "Email Inbox Widget",
 	title: "Email Inbox",
 	description: "show 5 new emails via imap",
