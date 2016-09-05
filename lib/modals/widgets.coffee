@@ -107,7 +107,7 @@ if Meteor.isServer
 		doc.modified = new Date()
 		
 		if !userId
-			throw new Meteor.Error(400, t("portal_widgets_error.login_required"));
+			throw new Meteor.Error(400, t("portal_widgets_error_login_required"));
 
 
 	db.portal_widgets.before.update (userId, doc, fieldNames, modifier, options) ->
@@ -115,6 +115,21 @@ if Meteor.isServer
 
 		modifier.$set.modified_by = userId;
 		modifier.$set.modified = new Date();
+
+	
+	db.portal_widgets.before.remove (userId, doc) ->
+		# check space exists
+		space = db.spaces.findOne(doc.space)
+		if !space
+			throw new Meteor.Error(400, t("portal_widgets_error_space_not_found"));
+		# only space admin can remove space_users
+		if space.admins.indexOf(userId) < 0
+			throw new Meteor.Error(400, t("portal_widgets_error_space_admins_only"));
+		# can not delete widget while some dashboards contains this widget
+		currentWidgetId = doc._id
+		if db.portal_dashboards.findOne({widgets: currentWidgetId})
+			throw new Meteor.Error(400, t("portal_widgets_error_contains_in_dashboards"));
+
 
 
 

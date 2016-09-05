@@ -81,7 +81,7 @@ if Meteor.isServer
 		doc.modified = new Date()
 		
 		if !userId
-			throw new Meteor.Error(400, t("portal_dashboards_error.login_required"));
+			throw new Meteor.Error(400, t("portal_dashboards_error_login_required"));
 
 
 	db.portal_dashboards.before.update (userId, doc, fieldNames, modifier, options) ->

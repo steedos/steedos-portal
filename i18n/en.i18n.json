@@ -12,6 +12,8 @@
     "portal_dashboards_widgets": "窗体",
     "portal_dashboards_modified": "修改时间",
 
+    "portal_dashboards_error_login_required":"请先登录",
+
     "portal_widgets": "窗体",
     "portal_widgets_name": "名称",
     "portal_widgets_title": "标题",
@@ -23,6 +25,11 @@
     "portal_widgets_onData": "数据源加载后事件",
     "portal_widgets_onRendered": "窗体加载后事件",
     "portal_widgets_modified": "修改时间",
+
+    "portal_widgets_error_login_required":"请先登录",
+    "portal_widgets_error_space_not_found": "未找到该工作区",
+    "portal_widgets_error_space_admins_only": "您不是该工作区的管理员",
+    "portal_widgets_error_contains_in_dashboards": "该窗体在其他面板中被引用，不能删除",
 
     "Help": "帮助"
 }
