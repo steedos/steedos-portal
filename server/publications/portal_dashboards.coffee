@@ -20,3 +20,4 @@ Meteor.publish 'portal_dashboards', (spaceId)->
             description: 1
             icon: 1
             widgets: 1
+            created: 1
