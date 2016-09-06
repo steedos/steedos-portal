@@ -21,3 +21,35 @@ Portal.helpers =
                 return []
         else
             return []
+
+
+
+Portal.autoCompileTemplate =
+    timeoutTag:null,
+    getCompiledResult: (source,data)->
+        template = Handlebars.compile(source);
+        return template(data);
+    autoCompile: ->
+
+        widgets = Portal.helpers.Widgets();
+        self = this;
+        widgets.forEach (widget) =>
+            debugger;
+            source = widget.template
+            data = widget.data
+            if source&&data
+                result = self.getCompiledResult source,data
+                id = widget._id
+                contentBox = $("#portal-widget-#{id}-content")
+                contentBox.empty()
+                contentBox.append(result);
+
+
+        # Meteor.setTimeout((->
+        #     console.log '====123'
+
+        # ), 3000)
+
+
+
+
