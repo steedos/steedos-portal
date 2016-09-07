@@ -32,7 +32,7 @@ Portal.autoCompileTemplate =
         try
             return Spacebars.toHTML(eval(data),source)
         catch e
-            return {}
+            return ""
     autoCompileByTime: ->
         @timeoutTag = Meteor.setTimeout @autoCompile, 3000
     autoCompile: ->
