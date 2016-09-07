@@ -38,4 +38,4 @@ if Meteor.isClient
             if Meteor.userId() and Session.get("spaceId")
                 AdminTables["portal_dashboards"]?.selector = {space: Session.get("spaceId")}
                 AdminTables["portal_widgets"]?.selector = {space: Session.get("spaceId")}
-                    
+

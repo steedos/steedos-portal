@@ -11,4 +11,4 @@ FlowRouter.route '/portal/admin',
 FlowRouter.route '/portal',
 	action: (params, queryParams)->
 		BlazeLayout.render 'masterLayout',
-				main: "portal_home"
+			main: "portal_home"

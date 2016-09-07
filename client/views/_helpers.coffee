@@ -15,40 +15,40 @@ Portal.helpers =
         dashboardId = Session.get("dashboardId")
         if dashboardId
             dashboard = db.portal_dashboards.findOne({_id:dashboardId})
-            if dashboard.widgets
+            if dashboard?.widgets
                 return db.portal_widgets.find({_id: {$in: dashboard.widgets}}).fetch()
             else
                 return []
         else
             return []
 
+    widgetTemplate: (source,data)->
+        return Portal.autoCompileTemplate.getCompiledResult source,data
 
 
 Portal.autoCompileTemplate =
     timeoutTag:null,
     getCompiledResult: (source,data)->
-        template = Handlebars.compile(source);
-        return template(data);
+        try
+            return Spacebars.toHTML(eval(data),source)
+        catch e
+            return {}
+    autoCompileByTime: ->
+        @timeoutTag = Meteor.setTimeout @autoCompile, 3000
     autoCompile: ->
-
+        Meteor.clearTimeout @timeoutTag
         widgets = Portal.helpers.Widgets();
-        self = this;
-        widgets.forEach (widget) =>
-            debugger;
+        widgets.forEach (widget) ->
             source = widget.template
             data = widget.data
             if source&&data
-                result = self.getCompiledResult source,data
+                result = Portal.autoCompileTemplate.getCompiledResult source,data
                 id = widget._id
                 contentBox = $("#portal-widget-#{id}-content")
                 contentBox.empty()
                 contentBox.append(result);
 
-
-        # Meteor.setTimeout((->
-        #     console.log '====123'
-
-        # ), 3000)
+        Portal.autoCompileTemplate.autoCompileByTime()
 
 
 
