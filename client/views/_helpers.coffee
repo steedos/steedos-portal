@@ -28,7 +28,7 @@ Portal.helpers =
         contentBox.empty()
         return Portal.autoCompileTemplate.getCompiledResult source,data
 
-
+# 自动编译widget方法集
 Portal.autoCompileTemplate =
     timeoutTag:null,
     getCompiledResult: (source,data)->
@@ -37,6 +37,7 @@ Portal.autoCompileTemplate =
         catch e
             return ""
     autoCompileByTime: ->
+        #启动定时器定时抓取数据源
         @timeoutTag = Meteor.setTimeout @autoCompile, 3000
     autoCompile: ->
         Meteor.clearTimeout @timeoutTag
