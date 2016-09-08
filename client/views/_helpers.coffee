@@ -22,7 +22,10 @@ Portal.helpers =
         else
             return []
 
-    widgetTemplate: (source,data)->
+    widgetTemplate: (id,source,data)->
+        # 这里因为定时抓取数据源编译那块可能先append了结果，所以这里需要每次变更时先清空标签内容，以防止出现用户看到两个重复widget界面的情况
+        contentBox = $("#portal-widget-#{id}-content")
+        contentBox.empty()
         return Portal.autoCompileTemplate.getCompiledResult source,data
 
 
