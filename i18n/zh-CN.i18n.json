@@ -10,6 +10,7 @@
     "portal_dashboards_description": "描述",
     "portal_dashboards_icon": "图标",
     "portal_dashboards_widgets": "窗体",
+    "portal_dashboards_freeboard": "排版设置",
     "portal_dashboards_modified": "修改时间",
 
     "portal_dashboards_error_login_required":"请先登录",

@@ -28,9 +28,97 @@ Portal.helpers =
         contentBox.empty()
         return Portal.autoCompileTemplate.getCompiledResult source,data
 
+    freeboardTemplate: (dashboardId,freeboard)->
+        return Portal.autoCompileTemplate.compiledFreeboard dashboardId,freeboard
+
 # 自动编译widget方法集
 Portal.autoCompileTemplate =
     timeoutTag:null,
+    datasources:{}
+    compiledFreeboard: (dashboardId,freeboard,isFirstTime)->
+        unless dashboardId
+            return ""
+        debugger
+        if isFirstTime
+            @loadAllDatasource dashboardId,freeboard
+            @loadDatasourceByTime dashboardId,freeboard
+            return @getCompiledFreeboardHtml dashboardId,freeboard,isFirstTime
+        else
+            compiledFreeboard = @getCompiledFreeboardHtml dashboardId,freeboard,isFirstTime
+            context = $ "#freeboard-panes-#{dashboardId}"
+            context.empty();
+            context.append compiledFreeboard
+    getCompiledFreeboardHtml: (dashboardId,freeboard,isFirstTime)->
+        try
+            unless dashboardId
+                return ""
+            debugger
+            freeboard = JSON.parse(freeboard)
+            reHtmls = []
+            if freeboard.panes?.length
+                freeboard.panes.forEach (pane) ->
+                    widgetHtmls =[]
+                    if pane.widgets?.length
+                        # find widgets that contains settings.html children node only
+                        activeWidgets = pane.widgets.filter (n)->
+                            return n.settings?.html
+                        activeWidgets.forEach (activeWidget) ->
+                            html = activeWidget.settings.html
+                            datasourceNames = Portal.autoCompileTemplate.getDatasourceNamesFromHtml html
+                            if datasourceNames?.length
+                                widgetClassname = datasourceNames.join(" ")
+                                if isFirstTime
+                                    tempWidgetHtml = "<div class = \"#{widgetClassname}\"></div>"
+                                else
+                                    # 这里执行的是一个闭包函数，用来避免变量污染
+                                    widgetContentHtml = eval("(function(datasources){return #{html}})(#{Portal.autoCompileTemplate.datasources[dashboardId]})")
+                                    tempWidgetHtml = "<div class = \"#{widgetClassname}\">#{widgetContentHtml}</div>"
+                            else
+                                widgetClassname = "no-datasource-widget"
+                                # 这里执行的是一个闭包函数，用来避免变量污染
+                                widgetContentHtml = eval("(function(){return #{html}})()")
+                                tempWidgetHtml = "<div class = \"#{widgetClassname}\">#{widgetContentHtml}</div>"
+                            widgetHtmls.push tempWidgetHtml
+                    if widgetHtmls.length
+                        reHtml = "<div clsss = \"freeboard-pane col-md-#{pane.col_width}\">#{widgetHtmls.join("")}</div>"
+                        reHtmls.push reHtml
+            return reHtmls.join ""
+        catch e
+            return ""
+    loadAllDatasource: (dashboardId,freeboard)->
+        try
+            unless dashboardId
+                return ""
+            debugger
+            freeboard = JSON.parse(freeboard)
+            if freeboard.datasources?.length
+                freeboard.datasources.forEach (datasource) ->
+                    settings = datasource.settings
+                    # only when the datasource.settings has name,method,refresh,url property at least then try to load it
+                    unless settings && settings.name && settings.method && settings.refresh && settings.url
+                        return
+                    $.ajax
+                        type: settings.method
+                        url: settings.url
+                        success: (result) ->
+                            debugger
+                            Portal.autoCompileTemplate.datasources[dashboardId][settings.name] = result
+                            Portal.autoCompileTemplate.compiledFreeboard dashboardId,freeboard,false
+
+        catch e
+            console.log 'loadAllDatasource faild'
+    loadDatasourceByTime: (dashboardId,freeboard)->
+        debugger
+    getDatasourceNamesFromHtml: (html)->
+        # fetch datasources string as array from html,just like ["datasources["hotoa_pending_list"],datasources["hotoa_completed_list"]"]
+        datasources = html.match(/datasources\[\"([^\r\n]+)\"\]/g)
+        if datasources
+            datasourceNames = datasources.map (n) ->
+                # fetch datasources key name，just like fetch hotoa_pending_list from datasources["hotoa_pending_list"] then add "widget-datasource-" for prefix
+                return "widget-datasource-" + n.match(/\"[^\r\n]+\"/)[0].replace /\"/g, ''
+        else
+            datasourceNames = []
+        return _.uniq datasourceNames
     getCompiledResult: (source,data)->
         try
             return Spacebars.toHTML(eval(data),source)

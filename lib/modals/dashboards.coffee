@@ -14,37 +14,25 @@ db.portal_dashboards._simpleSchema = new SimpleSchema
 		max: 500,
 		autoform: 
 			order: 20
-
-	description: 
-		type: String,
-		optional: true,
-		autoform: 
-			rows: 10,
-			order: 30
 	
 	icon:
 		type: String,
 		optional: false
 		autoform:
 			omit: false
-		
-	widgets: 
-		type: [String],
-		optional: true,
-		autoform:
-			omit: false
-			type: "selectize"
-			multiple: true
-			defaultValue: ->
-				return []
-			options: ->
-				options = db.portal_widgets.find().map (widget) ->
-					return {
-						value: widget._id,
-						label: widget.name
-					}
-				return options;
 
+	freeboard:
+		type: String,
+		optional: false,
+		autoform: 
+			rows: 20,
+
+	description: 
+		type: String,
+		optional: true,
+		autoform: 
+			rows: 10,
+		
 	created: 
 		type: Date,
 		optional: true

@@ -13,7 +13,13 @@
 		</div>
 	</div>
 	<div class="cell content portal-home-content">
-      {{#each Widgets}}
+    <div class="freeboard-panes" id="freeboard-panes-{{Dashboard._id}}">
+      {{{freeboardTemplate Dashboard._id Dashboard.freeboard 1}}}
+    </div>
+
+
+
+<!--       {{#each Widgets}}
         <div class="col-md-{{cols}} border-right">
           <div class="box box-primary box-widget">
             <div class="box-header with-border">
@@ -28,7 +34,7 @@
             </div>
           </div>
         </div>
-      {{/each}}
+      {{/each}} -->
 	</div>
 
 </template>

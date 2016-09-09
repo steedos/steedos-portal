@@ -29,7 +29,6 @@ Meteor.startup ->
     @portal_widgets = db.portal_widgets
     AdminConfig?.collections_add
         portal_dashboards: db.portal_dashboards.adminConfig
-        portal_widgets: db.portal_widgets.adminConfig
 
 
 if Meteor.isClient
@@ -37,5 +36,4 @@ if Meteor.isClient
         Tracker.autorun ->
             if Meteor.userId() and Session.get("spaceId")
                 AdminTables["portal_dashboards"]?.selector = {space: Session.get("spaceId")}
-                AdminTables["portal_widgets"]?.selector = {space: Session.get("spaceId")}
 
