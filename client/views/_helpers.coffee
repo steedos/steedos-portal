@@ -28,33 +28,33 @@ Portal.helpers =
         contentBox.empty()
         return Portal.autoCompileTemplate.getCompiledResult source,data
 
-    freeboardTemplate: (dashboardId,freeboard,isFirstTime)->
-        return Portal.autoCompileTemplate.compiledFreeboard dashboardId,freeboard,isFirstTime
+    freeboardTemplate: (dashboardId,freeboard)->
+        return Portal.autoCompileTemplate.compiledFreeboard dashboardId,freeboard,true
 
 # 自动编译widget方法集
 Portal.autoCompileTemplate =
-    timeoutTag:null,
+    timeoutTag:null
     datasources:{}
+    proxyurl:"https://thingproxy.freeboard.io/fetch/"
     compiledFreeboard: (dashboardId,freeboard,isFirstTime)->
         unless dashboardId
             return ""
-        debugger
         if isFirstTime
+            #declare a global variable named dashboardId in datasources so we can fetch the correct datasources later
             @datasources[dashboardId] = {}
+            Meteor.clearTimeout @timeoutTag
             @loadAllDatasource dashboardId,freeboard
             @loadDatasourceByTime dashboardId,freeboard
-            return @getCompiledFreeboardHtml dashboardId,freeboard,isFirstTime
+            return ""
         else
             compiledFreeboardHtml = @getCompiledFreeboardHtml dashboardId,freeboard,isFirstTime
             contentBox = $ "#freeboard-panes-#{dashboardId}"
-            # contentBox.empty();
-            debugger;
+            contentBox.empty();
             contentBox.append compiledFreeboardHtml
     getCompiledFreeboardHtml: (dashboardId,freeboard,isFirstTime)->
         try
             unless dashboardId
                 return ""
-            debugger
             if typeof freeboard == "string"
                 freeboard = JSON.parse freeboard
             reHtmls = []
@@ -67,24 +67,19 @@ Portal.autoCompileTemplate =
                             return n.settings?.html
                         activeWidgets.forEach (activeWidget) ->
                             html = activeWidget.settings.html
-                            datasourceNames = Portal.autoCompileTemplate.getDatasourceNamesFromHtml html
-                            if datasourceNames?.length
-                                widgetClassname = datasourceNames.join(" ")
-                                if isFirstTime
-                                    tempWidgetHtml = "<div class = \"#{widgetClassname}\"></div>"
-                                else
-                                    # 这里执行的是一个闭包函数，用来避免变量污染
-                                    evalFunString = "(function(datasources){debugger;#{html}})(#{JSON.stringify Portal.autoCompileTemplate.datasources[dashboardId]})"
-                                    try
-                                        widgetContentHtml = eval(evalFunString)
-                                    catch e
-                                        debugger
-                                        widgetContentHtml = "#{e.message}<br/>#{e.stack}"
-                                    tempWidgetHtml = "<div class = \"#{widgetClassname}\">#{widgetContentHtml}</div>"
+                            widgetClassname = "widget-content"
+                            if isFirstTime
+                                tempWidgetHtml = "<div class = \"#{widgetClassname}\"></div>"
                             else
-                                widgetClassname = "no-datasource-widget"
-                                # 这里执行的是一个闭包函数，用来避免变量污染
-                                widgetContentHtml = eval("(function(){return #{html}})()")
+                                # 这里执行的是一个传入datasources参数的闭包函数，用来避免变量污染
+                                evalFunString = "(function(datasources){#{html}})(#{JSON.stringify Portal.autoCompileTemplate.datasources[dashboardId]})"
+                                try
+                                    widgetContentHtml = eval(evalFunString)
+                                catch e
+                                    # just show the error when catch error
+                                    widgetClassname += " text-danger"
+                                    widgetContentHtml = "#{pane.title} #{t("portal_freeboard_compiling_error")}:<br/>"
+                                    widgetContentHtml += "#{e.message}<br/>#{e.stack}"
                                 tempWidgetHtml = "<div class = \"#{widgetClassname}\">#{widgetContentHtml}</div>"
                             widgetHtmls.push tempWidgetHtml
                     if widgetHtmls.length
@@ -95,35 +90,44 @@ Portal.autoCompileTemplate =
             return ""
     loadAllDatasource: (dashboardId,freeboard)->
         try
+            console.log("trying to loadAllDatasource for dashboardId:#{dashboardId}");
+            Meteor.clearTimeout @timeoutTag
             unless dashboardId
                 return ""
-            debugger
-            freeboard = JSON.parse(freeboard)
+            if typeof freeboard == "string"
+                freeboard = JSON.parse freeboard
             if freeboard.datasources?.length
                 freeboard.datasources.forEach (datasource) ->
                     settings = datasource.settings
-                    # only when the datasource.settings has name,method,refresh,url property at least then try to load it
-                    unless settings && settings.name && settings.method && settings.refresh && settings.url
+                    # only when the datasource.settings has name,method,url property at least then try to load it
+                    unless settings && settings.name && settings.method && settings.url
                         return
                     headers = settings.headers
                     $.ajax
                         type: settings.method
-                        url: 'https://thingproxy.freeboard.io/fetch/' + settings.url
+                        async: false,
+                        url: "#{Portal.autoCompileTemplate.proxyurl}#{settings.url}"
                         beforeSend: (XHR) ->
                             if headers?.length
-                                debugger
                                 headers.forEach (header) ->
                                     XHR.setRequestHeader header.name, header.value
                         success: (result) ->
-                            debugger
                             Portal.autoCompileTemplate.datasources[dashboardId][settings.name] = result
-                            Portal.autoCompileTemplate.compiledFreeboard dashboardId,freeboard,false
-                            debugger
+            # try to compile freeboard's js code and show the compiled html after all of the freeboard.datasources is loaded
+            @compiledFreeboard dashboardId,freeboard,false
 
         catch e
             console.log 'loadAllDatasource faild'
+        finally
+            Portal.autoCompileTemplate.loadDatasourceByTime dashboardId,freeboard
     loadDatasourceByTime: (dashboardId,freeboard)->
-        debugger
+        # get refresh property from freeboard,if nothing then apply the defalut refresh as 5 minute
+        refresh = if freeboard?.refresh then freeboard.refresh else 300
+        refresh = refresh*1000
+        #启动定时器定时抓取数据源
+        @timeoutTag = Meteor.setTimeout (->
+            Portal.autoCompileTemplate.loadAllDatasource dashboardId,freeboard
+        ), refresh
     getDatasourceNamesFromHtml: (html)->
         # fetch datasources string as array from html,just like ["datasources["hotoa_pending_list"],datasources["hotoa_completed_list"]"]
         datasources = html.match(/datasources\[\"([^\r\n]+)\"\]/g)
@@ -139,23 +143,23 @@ Portal.autoCompileTemplate =
             return Spacebars.toHTML(eval(data),source)
         catch e
             return ""
-    autoCompileByTime: ->
-        #启动定时器定时抓取数据源
-        @timeoutTag = Meteor.setTimeout @autoCompile, 3000
-    autoCompile: ->
-        Meteor.clearTimeout @timeoutTag
-        widgets = Portal.helpers.Widgets();
-        widgets.forEach (widget) ->
-            source = widget.template
-            data = widget.data
-            if source&&data
-                result = Portal.autoCompileTemplate.getCompiledResult source,data
-                id = widget._id
-                contentBox = $("#portal-widget-#{id}-content")
-                contentBox.empty()
-                contentBox.append(result);
+    # autoCompileByTime: ->
+    #     #启动定时器定时抓取数据源
+    #     @timeoutTag = Meteor.setTimeout @autoCompile, 3000
+    # autoCompile: ->
+    #     Meteor.clearTimeout @timeoutTag
+    #     widgets = Portal.helpers.Widgets();
+    #     widgets.forEach (widget) ->
+    #         source = widget.template
+    #         data = widget.data
+    #         if source&&data
+    #             result = Portal.autoCompileTemplate.getCompiledResult source,data
+    #             id = widget._id
+    #             contentBox = $("#portal-widget-#{id}-content")
+    #             contentBox.empty()
+    #             contentBox.append(result);
 
-        Portal.autoCompileTemplate.autoCompileByTime()
+    #     Portal.autoCompileTemplate.autoCompileByTime()
 
 
 

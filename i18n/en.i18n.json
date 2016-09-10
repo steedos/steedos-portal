@@ -14,6 +14,8 @@
     "portal_dashboards_modified": "修改时间",
 
     "portal_dashboards_error_login_required":"请先登录",
+    
+    "portal_freeboard_compiling_error":"在编译脚本时出错",
 
     "portal_widgets": "窗体",
     "portal_widgets_name": "名称",
