@@ -20,6 +20,7 @@ Portal.autoCompileTemplate =
     datasources:{}
     proxyurl:"https://thingproxy.freeboard.io/fetch/"
     compiledFreeboard: (dashboardId,freeboard,isFirstTime)->
+        debugger;
         unless dashboardId
             return ""
         if isFirstTime
@@ -70,7 +71,7 @@ Portal.autoCompileTemplate =
                         reHtmls.push reHtml
             return reHtmls.join ""
         catch e
-            return ""
+            return "<div class = \"text-danger\">#{e.message}<br/>#{e.stack}</div>"
     loadAllDatasource: (dashboardId,freeboard)->
         try
             console.log("trying to loadAllDatasource for dashboardId:#{dashboardId}");
@@ -83,7 +84,7 @@ Portal.autoCompileTemplate =
                 freeboard.datasources.forEach (datasource) ->
                     settings = datasource.settings
                     # only when the datasource.settings has name,method,url property at least then try to load it
-                    unless settings && settings.name && settings.method && settings.url
+                    unless settings && settings.method && settings.url
                         return
                     headers = settings.headers
                     $.ajax
@@ -95,12 +96,13 @@ Portal.autoCompileTemplate =
                                 headers.forEach (header) ->
                                     XHR.setRequestHeader header.name, header.value
                         success: (result) ->
-                            Portal.autoCompileTemplate.datasources[dashboardId][settings.name] = result
+                            debugger
+                            Portal.autoCompileTemplate.datasources[dashboardId][datasource.name] = result
             # try to compile freeboard's js code and show the compiled html after all of the freeboard.datasources is loaded
             @compiledFreeboard dashboardId,freeboard,false
 
         catch e
-            console.log 'loadAllDatasource faild'
+            console.error "loadAllDatasource faild:#{e.message}\r\n#{e.stack}"
         finally
             Portal.autoCompileTemplate.loadDatasourceByTime dashboardId,freeboard
     loadDatasourceByTime: (dashboardId,freeboard)->
