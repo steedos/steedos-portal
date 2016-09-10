@@ -28,8 +28,8 @@ Portal.helpers =
         contentBox.empty()
         return Portal.autoCompileTemplate.getCompiledResult source,data
 
-    freeboardTemplate: (dashboardId,freeboard)->
-        return Portal.autoCompileTemplate.compiledFreeboard dashboardId,freeboard
+    freeboardTemplate: (dashboardId,freeboard,isFirstTime)->
+        return Portal.autoCompileTemplate.compiledFreeboard dashboardId,freeboard,isFirstTime
 
 # 自动编译widget方法集
 Portal.autoCompileTemplate =
@@ -40,20 +40,23 @@ Portal.autoCompileTemplate =
             return ""
         debugger
         if isFirstTime
+            @datasources[dashboardId] = {}
             @loadAllDatasource dashboardId,freeboard
             @loadDatasourceByTime dashboardId,freeboard
             return @getCompiledFreeboardHtml dashboardId,freeboard,isFirstTime
         else
-            compiledFreeboard = @getCompiledFreeboardHtml dashboardId,freeboard,isFirstTime
-            context = $ "#freeboard-panes-#{dashboardId}"
-            context.empty();
-            context.append compiledFreeboard
+            compiledFreeboardHtml = @getCompiledFreeboardHtml dashboardId,freeboard,isFirstTime
+            contentBox = $ "#freeboard-panes-#{dashboardId}"
+            # contentBox.empty();
+            debugger;
+            contentBox.append compiledFreeboardHtml
     getCompiledFreeboardHtml: (dashboardId,freeboard,isFirstTime)->
         try
             unless dashboardId
                 return ""
             debugger
-            freeboard = JSON.parse(freeboard)
+            if typeof freeboard == "string"
+                freeboard = JSON.parse freeboard
             reHtmls = []
             if freeboard.panes?.length
                 freeboard.panes.forEach (pane) ->
@@ -71,7 +74,12 @@ Portal.autoCompileTemplate =
                                     tempWidgetHtml = "<div class = \"#{widgetClassname}\"></div>"
                                 else
                                     # 这里执行的是一个闭包函数，用来避免变量污染
-                                    widgetContentHtml = eval("(function(datasources){return #{html}})(#{Portal.autoCompileTemplate.datasources[dashboardId]})")
+                                    evalFunString = "(function(datasources){debugger;#{html}})(#{JSON.stringify Portal.autoCompileTemplate.datasources[dashboardId]})"
+                                    try
+                                        widgetContentHtml = eval(evalFunString)
+                                    catch e
+                                        debugger
+                                        widgetContentHtml = "#{e.message}<br/>#{e.stack}"
                                     tempWidgetHtml = "<div class = \"#{widgetClassname}\">#{widgetContentHtml}</div>"
                             else
                                 widgetClassname = "no-datasource-widget"
@@ -97,13 +105,20 @@ Portal.autoCompileTemplate =
                     # only when the datasource.settings has name,method,refresh,url property at least then try to load it
                     unless settings && settings.name && settings.method && settings.refresh && settings.url
                         return
+                    headers = settings.headers
                     $.ajax
                         type: settings.method
-                        url: settings.url
+                        url: 'https://thingproxy.freeboard.io/fetch/' + settings.url
+                        beforeSend: (XHR) ->
+                            if headers?.length
+                                debugger
+                                headers.forEach (header) ->
+                                    XHR.setRequestHeader header.name, header.value
                         success: (result) ->
                             debugger
                             Portal.autoCompileTemplate.datasources[dashboardId][settings.name] = result
                             Portal.autoCompileTemplate.compiledFreeboard dashboardId,freeboard,false
+                            debugger
 
         catch e
             console.log 'loadAllDatasource faild'
