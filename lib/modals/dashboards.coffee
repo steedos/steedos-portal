@@ -14,12 +14,6 @@ db.portal_dashboards._simpleSchema = new SimpleSchema
 		max: 500,
 		autoform: 
 			order: 20
-	
-	icon:
-		type: String,
-		optional: false
-		autoform:
-			omit: false
 
 	freeboard:
 		type: String,

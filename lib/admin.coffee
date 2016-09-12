@@ -3,7 +3,6 @@ db.portal_dashboards.adminConfig =
     color: "blue"
     tableColumns: [
         {name: "name"},
-        {name: "icon"},
         {name: "modified"},
     ]
     selector: {space: -1}

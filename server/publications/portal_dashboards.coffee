@@ -17,7 +17,6 @@ Meteor.publish 'portal_dashboards', (spaceId)->
         fields: 
             space: 1
             name: 1
-            icon: 1
             freeboard: 1
             description: 1
             created: 1
