@@ -32,7 +32,7 @@ Portal.autoCompileTemplate =
         else
             compiledFreeboardHtml = @getCompiledFreeboardHtml dashboardId,freeboard,isFirstTime
             contentBox = $ "#freeboard-panes-#{dashboardId}"
-            contentBox.empty();
+            contentBox.empty()
             contentBox.append compiledFreeboardHtml
     getCompiledFreeboardHtml: (dashboardId,freeboard,isFirstTime)->
         try
