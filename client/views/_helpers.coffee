@@ -89,10 +89,12 @@ Portal.autoCompileTemplate =
                     unless settings && settings.method && settings.url
                         return
                     headers = settings.headers
+                    use_thingproxy = settings.use_thingproxy
+                    url = if use_thingproxy then "#{Portal.autoCompileTemplate.proxyurl}#{settings.url}" else "#{settings.url}"
                     $.ajax
                         type: settings.method
                         async: false,
-                        url: "#{Portal.autoCompileTemplate.proxyurl}#{settings.url}"
+                        url: url,
                         beforeSend: (XHR) ->
                             if headers?.length
                                 headers.forEach (header) ->
