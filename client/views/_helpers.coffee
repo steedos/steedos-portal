@@ -66,7 +66,7 @@ Portal.autoCompileTemplate =
                                 tempWidgetHtml = "<div class = \"#{widgetClassname}\">#{widgetContentHtml}</div>"
                             widgetHtmls.push tempWidgetHtml
                     if widgetHtmls.length
-                        reHtml = "<div clsss = \"freeboard-pane col-md-#{pane.col_width}\">#{widgetHtmls.join("")}</div>"
+                        reHtml = "<div class = \"freeboard-pane col-md-#{pane.col_width}\">#{widgetHtmls.join("")}</div>"
                         reHtmls.push reHtml
             return reHtmls.join ""
         catch e
