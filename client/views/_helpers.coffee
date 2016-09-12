@@ -20,6 +20,7 @@ Portal.autoCompileTemplate =
     datasources:{}
     proxyurl:"https://thingproxy.freeboard.io/fetch/"
     compiledFreeboard: (dashboardId,freeboard,isFirstTime)->
+        debugger;
         unless dashboardId
             return ""
         if isFirstTime
@@ -95,6 +96,7 @@ Portal.autoCompileTemplate =
                                 headers.forEach (header) ->
                                     XHR.setRequestHeader header.name, header.value
                         success: (result) ->
+                            debugger
                             Portal.autoCompileTemplate.datasources[dashboardId][datasource.name] = result
             # try to compile freeboard's js code and show the compiled html after all of the freeboard.datasources is loaded
             @compiledFreeboard dashboardId,freeboard,false
