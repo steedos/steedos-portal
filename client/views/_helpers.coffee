@@ -66,7 +66,10 @@ Portal.autoCompileTemplate =
                                 tempWidgetHtml = "<div class = \"#{widgetClassname}\">#{widgetContentHtml}</div>"
                             widgetHtmls.push tempWidgetHtml
                     if widgetHtmls.length
-                        reHtml = "<div class = \"freeboard-pane col-md-#{pane.col_width}\">#{widgetHtmls.join("")}</div>"
+                        col_width = parseInt pane.col_width
+                        # assume the max col_width is 4,then we just need do *3 to match bootstrap's cols rule
+                        col_width = col_width*3
+                        reHtml = "<div class = \"freeboard-pane col-md-#{col_width}\">#{widgetHtmls.join("")}</div>"
                         reHtmls.push reHtml
             return reHtmls.join ""
         catch e
