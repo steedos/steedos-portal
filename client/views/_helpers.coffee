@@ -68,8 +68,8 @@ Portal.autoCompileTemplate =
                             widgetHtmls.push tempWidgetHtml
                     if widgetHtmls.length
                         col_width = parseInt pane.col_width
-                        # assume the max col_width is 4,then we just need do *3 to match bootstrap's cols rule
-                        col_width = col_width*3
+                        # assume the max col_width is 6(the dafault max col_width of freeboard),then we just need do *2 to match bootstrap's cols rule
+                        col_width = col_width*2
                         reHtml = "<div class = \"freeboard-pane col-md-#{col_width}\">#{widgetHtmls.join("")}</div>"
                         reHtmls.push reHtml
             return reHtmls.join ""
