@@ -19,7 +19,7 @@ Portal.autoCompileTemplate =
     timeoutTag:null
     datasources:{}
     # proxyurl:"https://thingproxy.freeboard.io/fetch/"
-    proxyurl:"/proxy_js/fetch/"
+    proxyurl:"/proxy_js?fetch="
     compiledFreeboard: (dashboardId,freeboard,isFirstTime)->
         unless dashboardId
             return ""
@@ -91,7 +91,7 @@ Portal.autoCompileTemplate =
                         return
                     headers = settings.headers
                     use_thingproxy = settings.use_thingproxy
-                    url = if use_thingproxy then "#{Portal.autoCompileTemplate.proxyurl}#{settings.url}" else "#{settings.url}"
+                    url = if use_thingproxy then "#{Portal.autoCompileTemplate.proxyurl}#{window.encodeURIComponent(settings.url)}" else "#{settings.url}"
                     $.ajax
                         type: settings.method
                         async: false,
