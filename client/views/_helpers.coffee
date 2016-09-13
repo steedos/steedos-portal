@@ -19,7 +19,7 @@ Portal.autoCompileTemplate =
     timeoutTag:null
     datasources:{}
     # proxyurl:"https://thingproxy.freeboard.io/fetch/"
-    proxyurl:"/proxy_js?fetch="
+    proxyurl:"/api/proxy?fetch="
     compiledFreeboard: (dashboardId,freeboard,isFirstTime)->
         unless dashboardId
             return ""
