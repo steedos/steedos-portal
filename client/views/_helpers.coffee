@@ -103,7 +103,6 @@ Portal.autoCompileTemplate =
                                 headers.forEach (header) ->
                                     XHR.setRequestHeader header.name, header.value
                         success: (result) ->
-                            debugger
                             Portal.Datasources[dashboardId][datasource.name] = result
                         error: () ->
                             Portal.Datasources[dashboardId][datasource.name] = null
