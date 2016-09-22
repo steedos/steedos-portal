@@ -17,7 +17,6 @@ Portal.helpers =
 # 自动编译dashboard.freeboard方法集
 Portal.autoCompileTemplate =
     timeoutTag:null
-    datasources:{}
     # proxyurl:"https://thingproxy.freeboard.io/fetch/"
     proxyurl:"/api/proxy?fetch="
     compiledFreeboard: (dashboardId,freeboard,isFirstTime)->
@@ -25,7 +24,7 @@ Portal.autoCompileTemplate =
             return ""
         if isFirstTime
             #declare a global variable named dashboardId in datasources so we can fetch the correct datasources later
-            @datasources[dashboardId] = {}
+            Portal.Datasources[dashboardId] = {}
             Meteor.clearTimeout @timeoutTag
             @loadAllDatasource dashboardId,freeboard
             @loadDatasourceByTime dashboardId,freeboard
@@ -56,7 +55,8 @@ Portal.autoCompileTemplate =
                                 tempWidgetHtml = "<div class = \"#{widgetClassname}\"></div>"
                             else
                                 # 这里执行的是一个传入datasources参数的闭包函数，用来避免变量污染
-                                evalFunString = "(function(datasources){#{html}})(#{JSON.stringify Portal.autoCompileTemplate.datasources[dashboardId]})"
+                                # html脚本内通过Portal.Datasources[dashboardId][datasourceName]来访问ajax请求到的数据
+                                evalFunString = "(function(){#{html}})()"
                                 try
                                     widgetContentHtml = eval(evalFunString)
                                 catch e
@@ -103,9 +103,10 @@ Portal.autoCompileTemplate =
                                 headers.forEach (header) ->
                                     XHR.setRequestHeader header.name, header.value
                         success: (result) ->
-                            Portal.autoCompileTemplate.datasources[dashboardId][datasource.name] = result
+                            debugger
+                            Portal.Datasources[dashboardId][datasource.name] = result
                         error: () ->
-                            Portal.autoCompileTemplate.datasources[dashboardId][datasource.name] = null
+                            Portal.Datasources[dashboardId][datasource.name] = null
                             console.error "loadAllDatasource faild:#{JSON.stringify(arguments)}"
 
 
