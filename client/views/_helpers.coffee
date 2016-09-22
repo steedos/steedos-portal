@@ -91,17 +91,24 @@ Portal.autoCompileTemplate =
                         return
                     headers = settings.headers
                     use_thingproxy = settings.use_thingproxy
+                    body = settings.body
                     url = if use_thingproxy then "#{Portal.autoCompileTemplate.proxyurl}#{window.encodeURIComponent(settings.url)}" else "#{settings.url}"
                     $.ajax
                         type: settings.method
                         async: false,
                         url: url,
+                        data: body,
                         beforeSend: (XHR) ->
                             if headers?.length
                                 headers.forEach (header) ->
                                     XHR.setRequestHeader header.name, header.value
                         success: (result) ->
                             Portal.autoCompileTemplate.datasources[dashboardId][datasource.name] = result
+                        error: () ->
+                            Portal.autoCompileTemplate.datasources[dashboardId][datasource.name] = null
+                            console.error "loadAllDatasource faild:#{JSON.stringify(arguments)}"
+
+
             # try to compile freeboard's js code and show the compiled html after all of the freeboard.datasources is loaded
             @compiledFreeboard dashboardId,freeboard,false
 
