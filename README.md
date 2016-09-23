@@ -34,9 +34,9 @@ apps_auth_user
    auth_name: "",
    user_id: "",
    user_fullname: "",
-   logon_name: "",
-   logon_password: ""
+   login_name: "",
+   login_password: ""
 
 
 
-{{Portal.GetAuthByName('cnpc').logon_name}}
+{{Portal.GetAuthByName('cnpc').login_name}}
