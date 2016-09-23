@@ -6,20 +6,20 @@ Steedos Portal App is an Notification Center for corperate apps, just like Mac.
 portal_dashboards
 	space: "",
 	name: "Corp Dashboard",
-	description: "",
-	icon: "ion icon name",
-	widgets: ["widget-id"]
+	freeboard: "Freeboard Script",
+	description: ""
 
 apps
-   id: "",
-   space: "",
-   auth_name: "",
-   on_click: ""
+	id: "",
+	space: "",
+	auth_name: "",
+	on_click: ""
 
-apps_auth
-   id: "",
-   name: "",, unique
-   title: ""
+apps_auths
+	space: "",
+	id: "",
+	name: "",, unique
+	title: ""
   
 [{
   name: 'ptr',
@@ -30,12 +30,13 @@ apps_auth
 }]
 
 
-apps_auth_user
-   auth_name: "",
-   user_id: "",
-   user_fullname: "",
-   login_name: "",
-   login_password: ""
+apps_auth_users
+	space: "",
+	auth_name: "",
+	user_id: "",
+	user_fullname: "",
+	login_name: "",
+	login_password: ""
 
 
 
