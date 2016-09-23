@@ -33,8 +33,8 @@ apps_auths
 apps_auth_users
 	space: "",
 	auth_name: "",
-	user_id: "",
-	user_fullname: "",
+	user: "",
+	user_name: "",
 	login_name: "",
 	login_password: ""
 

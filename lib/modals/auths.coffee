@@ -1,6 +1,6 @@
-db.portal_dashboards = new Meteor.Collection('portal_dashboards')
+db.apps_auths = new Meteor.Collection('apps_auths')
 
-db.portal_dashboards._simpleSchema = new SimpleSchema
+db.apps_auths._simpleSchema = new SimpleSchema
 	space: 
 		type: String,
 		autoform: 
@@ -9,42 +9,37 @@ db.portal_dashboards._simpleSchema = new SimpleSchema
 				return Session.get("spaceId");
 
 	name: 
-		type: String
-		optional: false
-		max: 200
+		type: String,
+		optional: false,
+		max: 200,
 		autoform: 
 			order: 20
 
-	freeboard:
-		type: String
-		optional: false
+	title:
+		type: String,
+		optional: false,
+		max: 200,
 		autoform: 
-			rows: 20
-
-	description: 
-		type: String
-		optional: true
-		autoform: 
-			rows: 10
+			order: 20
 		
 	created: 
-		type: Date
+		type: Date,
 		optional: true
 	created_by:
-		type: String
+		type: String,
 		optional: true
 	modified:
-		type: Date
+		type: Date,
 		optional: true
 	modified_by:
-		type: String
+		type: String,
 		optional: true
 		
 
 if Meteor.isClient
-	db.portal_dashboards._simpleSchema.i18n("portal_dashboards")
+	db.apps_auths._simpleSchema.i18n("apps_auths")
 
-db.portal_dashboards.attachSchema(db.portal_dashboards._simpleSchema)
+db.apps_auths.attachSchema(db.apps_auths._simpleSchema)
 
 
 
@@ -94,6 +89,9 @@ if Meteor.isServer
 		# only space admin can remove
 		if space.admins.indexOf(userId) < 0
 			throw new Meteor.Error(400, t("portal_dashboards_error_space_admins_only"));
+
+
+
 
 
 

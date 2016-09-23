@@ -58,6 +58,8 @@ Package.onUse(function(api) {
 
     api.addFiles('lib/core.coffee');
     api.addFiles('lib/modals/dashboards.coffee');
+    api.addFiles('lib/modals/auths.coffee');
+    api.addFiles('lib/modals/auth_users.coffee');
     api.addFiles('lib/admin.coffee');
 
     api.addFiles('client/views/_helpers.coffee', 'client');
@@ -73,6 +75,8 @@ Package.onUse(function(api) {
 
 
     api.addFiles('server/publications/portal_dashboards.coffee', 'server');
+    api.addFiles('server/publications/auths.coffee', 'server');
+    api.addFiles('server/publications/auth_users.coffee', 'server');
 
     // EXPORT
     api.export('Portal');
