@@ -76,6 +76,22 @@ Portal.autoCompileTemplate =
             return reHtmls.join ""
         catch e
             return "<div class = \"text-danger\">#{e.message}<br/>#{e.stack}</div>"
+    replaceParmsToValues: (content)->
+        if content
+            # 匹配所有{{}}对里面的内容（内容里面应该是写js脚本，不支持有回车换行的多行脚本）
+            # 一般来说，{{}}对里面的脚本会是Portal.GetAuthByName("auth_name").login_name，会调用全局的Portal.GetAuthByName函数根据auth_name返回apps_auth_users记录
+            reg = /{{(.|\n)+?}}/g
+            content = content.replace(reg,(n)->
+                try
+                    # 这里用函数闭包的目的只是为了避免变量污染
+                    n = n.replace('{{', '').replace('}}', '')
+                    return eval("(function(){return #{n}})()")
+                catch e
+                    # just console the error when catch error
+                    console.error "ajax datasource:#{datasource.name} #{t("portal_freeboard_compiling_ajax_content_error")}:"
+                    console.error "#{e.message}\r\n#{e.stack}"
+                    return n
+            )
     loadAllDatasource: (dashboardId,freeboard)->
         try
             console.log("trying to loadAllDatasource for dashboardId:#{dashboardId}");
@@ -92,23 +108,9 @@ Portal.autoCompileTemplate =
                         return
                     headers = settings.headers
                     use_thingproxy = settings.use_thingproxy
-                    body = settings.body
-                    if body
-                        # 匹配所有{{}}对里面的内容（内容里面应该是写js脚本，不支持有回车换行的多行脚本）
-                        # 一般来说，{{}}对里面的脚本会是Portal.GetAuthByName("auth_name").login_name，会调用全局的Portal.GetAuthByName函数根据auth_name返回apps_auth_users记录
-                        reg = /{{(.|\n)+?}}/g
-                        body = body.replace(reg,(n)->
-                            try
-                                # 这里用函数闭包的目的只是为了避免变量污染
-                                n = n.replace('{{', '').replace('}}', '')
-                                return eval("(function(){return #{n}})()")
-                            catch e
-                                # just console the error when catch error
-                                console.error "ajax datasource:#{datasource.name} #{t("portal_freeboard_compiling_ajax_body_error")}:"
-                                console.error "#{e.message}\r\n#{e.stack}"
-                                return n
-                        )
-                    url = if use_thingproxy then "#{Portal.autoCompileTemplate.proxyurl}#{window.encodeURIComponent(settings.url)}" else "#{settings.url}"
+                    body = Portal.autoCompileTemplate.replaceParmsToValues settings.body
+                    url = Portal.autoCompileTemplate.replaceParmsToValues settings.url
+                    url = if use_thingproxy then "#{Portal.autoCompileTemplate.proxyurl}#{window.encodeURIComponent(url)}" else "#{url}"
                     $.ajax
                         type: settings.method
                         async: false
