@@ -28,6 +28,7 @@
     "portal_dashboards_error_login_required":"请先登录",
     
     "portal_freeboard_compiling_error":"在编译脚本时出错",
+    "portal_freeboard_compiling_ajax_body_error":"在编译请求BODY脚本时出错",
 
     "portal_dashboards_error_space_not_found": "未找到该工作区",
     "portal_dashboards_error_space_admins_only": "您不是该工作区的管理员",

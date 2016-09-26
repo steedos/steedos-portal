@@ -92,6 +92,20 @@ Portal.autoCompileTemplate =
                     headers = settings.headers
                     use_thingproxy = settings.use_thingproxy
                     body = settings.body
+                    if body
+                        # 匹配所有{{}}对里面的内容（内容里面应该是写js脚本，支持有回车换行的多行脚本，但是要注意行之前要用分号分开）
+                        # 一般来说，{{}}对里面的脚本会是Portal.GetAuthByName("auth_name").login_name，会调用全局的Portal.GetAuthByName函数根据auth_name返回apps_auth_users记录
+                        reg = /{{(.|\n)+?}}/g
+                        body = body.replace(reg,(n)->
+                            try
+                                # 这里用函数闭包的目的不只是为了避免变量污染，更重要的是支持脚本中带return语句
+                                return eval("(function(){#{n}})()")
+                            catch e
+                                # just console the error when catch error
+                                console.error "ajax datasource:#{datasource.name} #{t("portal_freeboard_compiling_ajax_body_error")}:"
+                                console.error "#{e.message}\r\n#{e.stack}"
+                                return n
+                        )
                     url = if use_thingproxy then "#{Portal.autoCompileTemplate.proxyurl}#{window.encodeURIComponent(settings.url)}" else "#{settings.url}"
                     $.ajax
                         type: settings.method
