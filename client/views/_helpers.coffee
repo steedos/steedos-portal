@@ -63,10 +63,10 @@ Portal.autoCompileTemplate =
                                 catch e
                                     # just show the error when catch error
                                     # 这里整个catch中不可以调用t多语言函数，比如t("portal_freeboard_compiling_error")，因为会造成不断重复调用Portal.helpers.freeboardTemplate的死循环
+                                    # 这很可能是meteor1.2版本的bug，在1.4中应该已不存在这个问题
                                     widgetClassname += " text-danger"
                                     widgetContentHtml = "#{pane.title} 在编译脚本时出错"
-                                    console.log "#{pane.title} 在编译脚本时出错:"
-                                    console.log "#{e.message} \r\n #{e.stack}"
+                                    widgetContentHtml += "#{e.message} <br/> #{e.stack}"
                                 tempWidgetHtml = "<div class = \"#{widgetClassname}\">#{widgetContentHtml}</div>"
                             widgetHtmls.push tempWidgetHtml
                     if widgetHtmls.length
@@ -78,7 +78,7 @@ Portal.autoCompileTemplate =
             return reHtmls.join ""
         catch e
             return "<div class = \"text-danger\">#{e.message}<br/>#{e.stack}</div>"
-    replaceParmsToValues: (content)->
+    replaceParmsToValues: (datasource,content)->
         if content
             # 匹配所有{{}}对里面的内容（内容里面应该是写js脚本，不支持有回车换行的多行脚本）
             # 一般来说，{{}}对里面的脚本会是Portal.GetAuthByName("auth_name").login_name，会调用全局的Portal.GetAuthByName函数根据auth_name返回apps_auth_users记录
@@ -90,7 +90,9 @@ Portal.autoCompileTemplate =
                     return eval("(function(){return #{n}})()")
                 catch e
                     # just console the error when catch error
-                    console.error "ajax datasource:#{datasource.name} #{t("portal_freeboard_compiling_ajax_content_error")}:"
+                    # 这里整个catch中不可以调用t多语言函数，比如t("portal_freeboard_compiling_error")，因为会造成不断重复调用Portal.helpers.freeboardTemplate的死循环
+                    # 这很可能是meteor1.2版本的bug，在1.4中应该已不存在这个问题
+                    console.error "ajax datasource:#{datasource.name} 在编译请求内容脚本时出错:"
                     console.error "#{e.message}\r\n#{e.stack}"
                     return n
             )
@@ -110,8 +112,8 @@ Portal.autoCompileTemplate =
                         return
                     headers = settings.headers
                     use_thingproxy = settings.use_thingproxy
-                    body = Portal.autoCompileTemplate.replaceParmsToValues settings.body
-                    url = Portal.autoCompileTemplate.replaceParmsToValues settings.url
+                    body = Portal.autoCompileTemplate.replaceParmsToValues datasource,settings.body
+                    url = Portal.autoCompileTemplate.replaceParmsToValues datasource,settings.url
                     url = if use_thingproxy then "#{Portal.autoCompileTemplate.proxyurl}#{window.encodeURIComponent(url)}" else "#{url}"
                     $.ajax
                         type: settings.method
