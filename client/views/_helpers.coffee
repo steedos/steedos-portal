@@ -55,6 +55,8 @@ Portal.autoCompileTemplate =
                             if isFirstTime
                                 tempWidgetHtml = "<div class = \"#{widgetClassname}\"></div>"
                             else
+                                # 这里把脚本内容中datasources变量变成全局的Portal.Datasources
+                                html = html.replace(/\bdatasources\b/g,"Portal.Datasources[\"#{dashboardId}\"]")
                                 # 这里执行的是一个传入datasources参数的闭包函数，用来避免变量污染
                                 # html脚本内通过Portal.Datasources[dashboardId][datasourceName]来访问ajax请求到的数据
                                 evalFunString = "(function(){#{html}})()"
@@ -78,7 +80,7 @@ Portal.autoCompileTemplate =
             return reHtmls.join ""
         catch e
             return "<div class = \"text-danger\">#{e.message}<br/>#{e.stack}</div>"
-    replaceParmsToValues: (datasource,content)->
+    replaceParmsToValues: (dashboardId,datasource,content)->
         if content
             # 匹配所有{{}}对里面的内容（内容里面应该是写js脚本，不支持有回车换行的多行脚本）
             # 一般来说，{{}}对里面的脚本会是Portal.GetAuthByName("auth_name").login_name，会调用全局的Portal.GetAuthByName函数根据auth_name返回apps_auth_users记录
@@ -87,6 +89,8 @@ Portal.autoCompileTemplate =
                 try
                     # 这里用函数闭包的目的只是为了避免变量污染
                     n = n.replace('{{', '').replace('}}', '')
+                    # 这里把脚本内容中datasources变量变成全局的Portal.Datasources
+                    n = n.replace(/\bdatasources\b/g,"Portal.Datasources[\"#{dashboardId}\"]")
                     return eval("(function(){return #{n}})()")
                 catch e
                     # just console the error when catch error
@@ -112,8 +116,8 @@ Portal.autoCompileTemplate =
                         return
                     headers = settings.headers
                     use_thingproxy = settings.use_thingproxy
-                    body = Portal.autoCompileTemplate.replaceParmsToValues datasource,settings.body
-                    url = Portal.autoCompileTemplate.replaceParmsToValues datasource,settings.url
+                    body = Portal.autoCompileTemplate.replaceParmsToValues dashboardId,datasource,settings.body
+                    url = Portal.autoCompileTemplate.replaceParmsToValues dashboardId,datasource,settings.url
                     url = if use_thingproxy then "#{Portal.autoCompileTemplate.proxyurl}#{window.encodeURIComponent(url)}" else "#{url}"
                     $.ajax
                         type: settings.method
