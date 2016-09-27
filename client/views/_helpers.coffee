@@ -62,9 +62,11 @@ Portal.autoCompileTemplate =
                                     widgetContentHtml = eval(evalFunString)
                                 catch e
                                     # just show the error when catch error
+                                    # 这里整个catch中不可以调用t多语言函数，比如t("portal_freeboard_compiling_error")，因为会造成不断重复调用Portal.helpers.freeboardTemplate的死循环
                                     widgetClassname += " text-danger"
-                                    widgetContentHtml = "#{pane.title} #{t("portal_freeboard_compiling_error")}:<br/>"
-                                    widgetContentHtml += "#{e.message}<br/>#{e.stack}"
+                                    widgetContentHtml = "#{pane.title} 在编译脚本时出错"
+                                    console.log "#{pane.title} 在编译脚本时出错:"
+                                    console.log "#{e.message} \r\n #{e.stack}"
                                 tempWidgetHtml = "<div class = \"#{widgetClassname}\">#{widgetContentHtml}</div>"
                             widgetHtmls.push tempWidgetHtml
                     if widgetHtmls.length
