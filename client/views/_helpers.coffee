@@ -100,6 +100,9 @@ Portal.autoCompileTemplate =
                     console.error "#{e.message}\r\n#{e.stack}"
                     return n
             )
+            return content
+        else
+            return ""
     loadAllDatasource: (dashboardId,freeboard)->
         try
             console.log("trying to loadAllDatasource for dashboardId:#{dashboardId}");
