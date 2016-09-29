@@ -14,31 +14,33 @@
 	</div>
 	<div class="cell content">
 
-		<div class="bd">
-			<div class="weui_cells weui_cells_access">
-				<a class="weui_cell navigation" href="/admin/view/portal_dashboards/">
-					<div class="weui_cell_hd"><i class="fa fa-fw fa-dashboard"></i></div>
-					<div class="weui_cell_bd weui_cell_primary">
-						&nbsp;{{_ "portal_dashboard_settings"}}
-					</div>
-					<div class="weui_cell_ft">
-					</div>
-				</a>
+		{{#if isSpaceAdmin}}
+			<div class="bd">
+				<div class="weui_cells weui_cells_access">
+					<a class="weui_cell navigation" href="/admin/view/portal_dashboards/">
+						<div class="weui_cell_hd"><i class="fa fa-fw fa-dashboard"></i></div>
+						<div class="weui_cell_bd weui_cell_primary">
+							&nbsp;{{_ "portal_dashboard_settings"}}
+						</div>
+						<div class="weui_cell_ft">
+						</div>
+					</a>
+				</div>
 			</div>
-		</div>
 
-		<div class="bd">
-			<div class="weui_cells weui_cells_access">
-				<a class="weui_cell navigation" href="/admin/view/apps_auths/">
-					<div class="weui_cell_hd"><i class="fa fa-fw fa-dashboard"></i></div>
-					<div class="weui_cell_bd weui_cell_primary">
-						&nbsp;{{_ "apps_auths_settings"}}
-					</div>
-					<div class="weui_cell_ft">
-					</div>
-				</a>
+			<div class="bd">
+				<div class="weui_cells weui_cells_access">
+					<a class="weui_cell navigation" href="/admin/view/apps_auths/">
+						<div class="weui_cell_hd"><i class="fa fa-fw fa-dashboard"></i></div>
+						<div class="weui_cell_bd weui_cell_primary">
+							&nbsp;{{_ "apps_auths_settings"}}
+						</div>
+						<div class="weui_cell_ft">
+						</div>
+					</a>
+				</div>
 			</div>
-		</div>
+		{{/if}}
 
 		<div class="bd">
 			<div class="weui_cells weui_cells_access">
@@ -52,20 +54,6 @@
 				</a>
 			</div>
 		</div>
-		
-		<div class="bd">
-			<div class="weui_cells weui_cells_access">
-				<a class="weui_cell" href="/steedos/help">
-					<div class="weui_cell_hd"><i class="ion ion-help-circled"></i></div>
-					<div class="weui_cell_bd weui_cell_primary">
-						&nbsp;{{_ "Help"}}
-					</div>
-					<div class="weui_cell_ft">
-					</div>
-				</a>
-			</div>
-		</div>
-
 
 	</div>
 
