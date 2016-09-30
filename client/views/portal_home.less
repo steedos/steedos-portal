@@ -3,10 +3,18 @@
 	.freeboard-pane{
 		.widget-content{
 			font-family: Microsoft YaHei;
-			font-size: 14px;
+			font-size: 16px;
+			font-weight: 300;
+		    line-height: 1.4em;
 			margin-right: -20px;
+			a{
+				text-decoration:none;
+			}
 			.callout{
 				margin-bottom: 12px;
+				&.radius-none{
+					border-radius: 0px;
+				}
 			}
 			ul,li{
 				list-style: none;
@@ -14,12 +22,14 @@
 			    padding: 0;
 			}
 			.widget-header{
-				margin-bottom: 6px;
+				margin-bottom: 8px;
 				font-weight:bolder;
 				.widget-icon{
 					float: left;
 					font-size: 36px;
 				    margin-right: 12px;
+				    height: 50px;
+				    line-height: 50px;
 				}
 				.widget-title{
 					float: left;
@@ -28,18 +38,23 @@
 				}
 			}
 			.widget-body{
-				clear:bolder;
+				clear:both;
 				.is-empty{
 					color:#777;
 				}
 			}
 			.widget-mini{
+				text-align:center;
 				.widget-icon{
-					float: auto;
-					font-size: 42px;
+					float: none;
+					font-size: 48px;
 				    margin-right: 0px;
+				    margin-bottom:20px;
+				    margin-top:20px;
+				    font-weight:bold;
 				}
 				.widget-title{
+					float: none;
 				    height: auto;
 				    line-height: auto;
 				}
