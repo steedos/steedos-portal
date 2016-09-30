@@ -66,9 +66,9 @@ Portal.autoCompileTemplate =
                                     # just show the error when catch error
                                     # 这里整个catch中不可以调用t多语言函数，比如t("portal_freeboard_compiling_error")，因为会造成不断重复调用Portal.helpers.freeboardTemplate的死循环
                                     # 这很可能是meteor1.2版本的bug，在1.4中应该已不存在这个问题
-                                    widgetClassname += " text-danger"
-                                    widgetContentHtml = "#{pane.title} 在编译脚本时出错"
-                                    widgetContentHtml += "#{e.message} <br/> #{e.stack}"
+                                    console.error "#{pane.title} 在编译脚本时出错"
+                                    console.error "#{e.message} <br/> #{e.stack}"
+                                    widgetContentHtml = ""
                                 tempWidgetHtml = "<div class = \"#{widgetClassname}\">#{widgetContentHtml}</div>"
                             widgetHtmls.push tempWidgetHtml
                     if widgetHtmls.length
