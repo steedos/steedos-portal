@@ -45,7 +45,7 @@ db.apps_auths.attachSchema(db.apps_auths._simpleSchema)
 
 if Meteor.isServer
 	
-	db.portal_dashboards.before.insert (userId, doc) ->
+	db.apps_auths.before.insert (userId, doc) ->
 		if !userId
 			throw new Meteor.Error(400, t("portal_dashboards_error_login_required"));
 		# check space exists
@@ -62,7 +62,7 @@ if Meteor.isServer
 		doc.modified = new Date()
 		
 
-	db.portal_dashboards.before.update (userId, doc, fieldNames, modifier, options) ->
+	db.apps_auths.before.update (userId, doc, fieldNames, modifier, options) ->
 		if !userId
 			throw new Meteor.Error(400, t("portal_dashboards_error_login_required"));
 		# check space exists
@@ -79,7 +79,7 @@ if Meteor.isServer
 		modifier.$set.modified = new Date();
 
 
-	db.portal_dashboards.before.remove (userId, doc) ->
+	db.apps_auths.before.remove (userId, doc) ->
 		if !userId
 			throw new Meteor.Error(400, t("portal_dashboards_error_login_required"));
 		# check space exists
