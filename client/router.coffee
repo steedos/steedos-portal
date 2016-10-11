@@ -3,10 +3,10 @@ checkUserSigned = (context, redirect) ->
 		FlowRouter.go '/steedos/sign-in';
 
 portalRoutes = FlowRouter.group
-	prefix: '/app/portal',
+	prefix: '/portal',
 	name: 'portalRoutes'
 
-portalRoutes.route '/index',
+portalRoutes.route '/home',
 	action: (params, queryParams)->
 		if Meteor.userId()
 			BlazeLayout.render 'masterLayout',
@@ -17,4 +17,5 @@ portalRoutes.route '/admin',
 		if Meteor.userId()
 			BlazeLayout.render 'masterLayout',
 				main: "portal_admin_home"
+
 
