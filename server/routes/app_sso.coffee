@@ -47,6 +47,8 @@ AppSSO =
 		console.log "auth:"
 		console.log apps_auth_user
 
+		error_msg = ""
+
 		app = db.apps.findOne {_id:app_id}
 		if app
 			if app.is_use_ie
@@ -99,6 +101,16 @@ AppSSO =
 						    font-size: 36px;
 						    color: #dfdfdf;
 						}
+						.error-msg{
+							position: absolute;
+						    left: 0px;
+						    right: 0px;
+						    bottom: 20px;
+						    z-index: 1100;
+						    text-align: center;
+						    font-size: 20px;
+						    color: #a94442;
+						}
 					</style>
 					<script type="text/javascript">
 						#{app_script}
@@ -107,7 +119,7 @@ AppSSO =
 				<body>
 					#{app_script}
 					<div class = "loading">Loading...</div>
-					<div class = "text-danger">#{error_msg}</div>
+					<div class = "error-msg">#{error_msg}</div>
 				</body>
 			</html>
 		"""
