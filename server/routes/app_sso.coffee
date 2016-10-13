@@ -1,20 +1,5 @@
 AppSSO =
-	max_request_length: 100000
-	proxy_request_timeout_ms: 10000
-	enable_logging: true
 
-	addCORSHeaders: (req, res)->
-		if req.method.toUpperCase() == 'OPTIONS'
-			if req.headers['access-control-request-headers']
-				res.setHeader 'Access-Control-Allow-Headers', req.headers['access-control-request-headers']
-			if req.headers['access-control-request-method']
-				res.setHeader 'Access-Control-Allow-Methods', req.headers['access-control-request-method']
-
-		if req.headers['origin']
-			res.setHeader 'Access-Control-Allow-Origin', req.headers['origin']
-		else
-			res.setHeader 'Access-Control-Allow-Origin', '*'
-	
 	writeResponse: (res, httpCode, body)->
 		res.statusCode = httpCode;
 		res.end(body);
@@ -24,9 +9,6 @@ AppSSO =
 		
 	sendAuthTokenExpiredResponse: (res)->
 		return @writeResponse(res, 401, "the auth_token has expired.");
-		
-	getClientAddress: (req)->
-		return (req.headers['x-forwarded-for'] or '').split(',')[0] or req.connection.remoteAddress
 
 	sendHtmlResponse: (req, res)->
 		app_id = req.params.app_id
