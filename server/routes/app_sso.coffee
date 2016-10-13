@@ -96,7 +96,6 @@ AppSSO =
 					</style>
 				</head>
 				<body>
-					#{app_script}
 					<div class = "loading">Loading...</div>
 					<div class = "error-msg">#{error_msg}</div>
 					<script type="text/javascript">
