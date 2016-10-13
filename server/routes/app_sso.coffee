@@ -27,15 +27,6 @@ AppSSO =
 		unless user
 			AppSSO.sendAuthTokenExpiredResponse res
 
-		apps_auth_user = Portal.GetAuthByName auth_name, user_id
-
-		console.log "auth_name:"
-		console.log auth_name
-		console.log "user_id:"
-		console.log user_id
-		console.log "auth:"
-		console.log apps_auth_user
-
 		error_msg = ""
 
 		app = db.apps.findOne {_id:app_id}
@@ -46,6 +37,7 @@ AppSSO =
 					# 这里需要把脚本中{{login_name}}及{{login_password}}替换成当前用户在域账户（即apps_auth_user）中设置的域账户及密码
 					reg_login_name = /{{login_name}}/g
 					reg_login_password = /{{login_password}}/g
+					apps_auth_user = Portal.GetAuthByName auth_name, app.space, user_id
 					if apps_auth_user
 						login_name = apps_auth_user.login_name
 						login_password = apps_auth_user.login_password
