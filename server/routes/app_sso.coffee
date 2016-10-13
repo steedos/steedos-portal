@@ -63,44 +63,45 @@ AppSSO =
 			<html>
 				<head>
 					<meta charset="utf-8">
-        			<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-        			<title>Steedos</title>
+					<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+					<title>Steedos</title>
+					<script type="text/javascript" src="/packages/steedos_portal/client/jquery/jquery-1.11.2.min.js"></script>
 					<style>
 						body { 
 							background-color: #222d32;
 							color:#fff;
-						    font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+							font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 						}
 						.loading{
-						    position: absolute;
+							position: absolute;
 							left: 0px;
-						    right: 0px;
-						    top: 50%;
-						    z-index: 1100;
-						    text-align: center;
-						    margin-top: -30px;
-						    font-size: 36px;
-						    color: #dfdfdf;
+							right: 0px;
+							top: 50%;
+							z-index: 1100;
+							text-align: center;
+							margin-top: -30px;
+							font-size: 36px;
+							color: #dfdfdf;
 						}
 						.error-msg{
 							position: absolute;
-						    left: 0px;
-						    right: 0px;
-						    bottom: 20px;
-						    z-index: 1100;
-						    text-align: center;
-						    font-size: 20px;
-						    color: #a94442;
+							left: 0px;
+							right: 0px;
+							bottom: 20px;
+							z-index: 1100;
+							text-align: center;
+							font-size: 20px;
+							color: #a94442;
 						}
 					</style>
-					<script type="text/javascript">
-						#{app_script}
-					</script>
 				</head>
 				<body>
 					#{app_script}
 					<div class = "loading">Loading...</div>
 					<div class = "error-msg">#{error_msg}</div>
+					<script type="text/javascript">
+						#{app_script}
+					</script>
 				</body>
 			</html>
 		"""

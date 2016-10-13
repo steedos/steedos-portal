@@ -80,6 +80,8 @@ Package.onUse(function(api) {
 
     api.addFiles('server/routes/app_sso.coffee', 'server');
 
+    api.addAssets("client/jquery/jquery-1.11.2.min.js", "client");
+
     // EXPORT
     api.export('Portal');
 
