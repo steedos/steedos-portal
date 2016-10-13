@@ -20,10 +20,10 @@ AppSSO =
 		res.end(body);
 		
 	sendInvalidURLResponse: (res)->
-		return @writeResponse(res, 404, "url must be has querys as authToken,userId,authName");
+		return @writeResponse(res, 404, "url must be has querys as authToken,userId,authName.");
 		
-	sendTooBigResponse: (res)->
-		return @writeResponse(res, 413, "the content in the request or response cannot exceed " + @max_request_length + " characters.");
+	sendAuthTokenExpiredResponse: (res)->
+		return @writeResponse(res, 401, "the auth_token has expired.");
 		
 	getClientAddress: (req)->
 		return (req.headers['x-forwarded-for'] or '').split(',')[0] or req.connection.remoteAddress
@@ -37,6 +37,13 @@ AppSSO =
 
 		unless auth_token and user_id and auth_name
 			AppSSO.sendInvalidURLResponse res
+
+		hashedToken = Accounts._hashLoginToken(auth_token)
+		user = Meteor.users.findOne
+			_id: user_id,
+			"services.resume.loginTokens.hashedToken": hashedToken
+		unless user
+			AppSSO.sendAuthTokenExpiredResponse res
 
 		apps_auth_user = Portal.GetAuthByName auth_name, user_id
 
