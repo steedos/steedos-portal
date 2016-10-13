@@ -1,6 +1,6 @@
 Portal = 
-	GetAuthByName: (auth_name) ->
-		user = Meteor.userId()
+	GetAuthByName: (auth_name,user_id) ->
+		user = if user_id then user_id else Meteor.userId()
 		return db.apps_auth_users.findOne({user:user,auth_name:auth_name})
 
 # Portal Freeboard设置中datasources变量保存到全局变量Portal.Datasources中

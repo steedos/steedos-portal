@@ -78,6 +78,8 @@ Package.onUse(function(api) {
     api.addFiles('server/publications/auths.coffee', 'server');
     api.addFiles('server/publications/auth_users.coffee', 'server');
 
+    api.addFiles('server/routes/app_sso.coffee', 'server');
+
     // EXPORT
     api.export('Portal');
 
