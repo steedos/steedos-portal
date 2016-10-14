@@ -15,6 +15,7 @@ AppSSO =
 		query = req.query
 		auth_token = query.authToken
 		user_id = query.userId
+		return_url = query.returnUrl
 
 		unless auth_token and user_id
 			AppSSO.sendInvalidURLResponse res
@@ -46,6 +47,10 @@ AppSSO =
 						login_password = ""
 					app_script = app_script.replace reg_login_name, login_name
 					app_script = app_script.replace reg_login_password, login_password
+					if return_url
+						reg_return_url = /{{return_url}}/g
+						app_script = app_script.replace reg_return_url, return_url
+						
 				else
 					error_msg = "当前应用的[链接脚本]属性内容为空，无法执行单点登录脚本"
 					app_script = ""
