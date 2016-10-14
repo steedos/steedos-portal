@@ -5,7 +5,7 @@ AppSSO =
 		res.end(body);
 		
 	sendInvalidURLResponse: (res)->
-		return @writeResponse(res, 404, "url must be has querys as authToken,userId,authName.");
+		return @writeResponse(res, 404, "url must be has querys as authToken,userId.");
 		
 	sendAuthTokenExpiredResponse: (res)->
 		return @writeResponse(res, 401, "the auth_token has expired.");
@@ -15,9 +15,8 @@ AppSSO =
 		query = req.query
 		auth_token = query.authToken
 		user_id = query.userId
-		auth_name = query.authName
 
-		unless auth_token and user_id and auth_name
+		unless auth_token and user_id
 			AppSSO.sendInvalidURLResponse res
 
 		hashedToken = Accounts._hashLoginToken(auth_token)
@@ -37,7 +36,7 @@ AppSSO =
 					# 这里需要把脚本中{{login_name}}及{{login_password}}替换成当前用户在域账户（即apps_auth_user）中设置的域账户及密码
 					reg_login_name = /{{login_name}}/g
 					reg_login_password = /{{login_password}}/g
-					apps_auth_user = Portal.GetAuthByName auth_name, app.space, user_id
+					apps_auth_user = Portal.GetAuthByName app.auth_name, app.space, user_id
 					if apps_auth_user
 						login_name = apps_auth_user.login_name
 						login_password = apps_auth_user.login_password
