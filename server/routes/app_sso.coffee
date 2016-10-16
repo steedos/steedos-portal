@@ -47,10 +47,11 @@ AppSSO =
 						login_password = ""
 					app_script = app_script.replace reg_login_name, login_name
 					app_script = app_script.replace reg_login_password, login_password
-					if return_url
-						# 当接口参数中提供了用于返回的return_url时，需要把脚本中return_url占位符替换成参数中的return_url
-						reg_return_url = /{{return_url}}/g
-						app_script = app_script.replace reg_return_url, return_url
+					unless return_url
+						return_url = ""
+					# 当接口参数中提供了用于返回的return_url时，需要把脚本中return_url占位符替换成参数中的return_url
+					reg_return_url = /{{return_url}}/g
+					app_script = app_script.replace reg_return_url, return_url
 				else
 					error_msg = "当前应用的[链接脚本]属性内容为空，无法执行单点登录脚本"
 					app_script = ""
