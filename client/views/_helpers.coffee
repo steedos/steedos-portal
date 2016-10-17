@@ -35,10 +35,9 @@ Portal.autoCompileTemplate =
             return ""
         else
             compiledFreeboardHtml = @getCompiledFreeboardHtml dashboardId,freeboard,isFirstTime
-            console.log "compiled freeboard html is:"
-            console.log compiledFreeboardHtml
             contentBox = $ "#freeboard-panes-#{dashboardId}"
             contentBox.empty()
+            console.log "will append the freeboard html to #freeboard-panes-#{dashboardId}"
             contentBox.append compiledFreeboardHtml
     getCompiledFreeboardHtml: (dashboardId,freeboard,isFirstTime)->
         try
