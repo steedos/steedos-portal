@@ -21,22 +21,28 @@ Portal.autoCompileTemplate =
     proxyurl:"/api/proxy?fetch="
     ajaxTimeout:1 #timeout seconds for ajax
     compiledFreeboard: (dashboardId,freeboard,isFirstTime)->
+        console.log "compiling freeboard...isFirstTime:#{isFirstTime},dashboardId:#{dashboardId}"
         unless dashboardId
             return ""
         if isFirstTime
             #declare a global variable named dashboardId in datasources so we can fetch the correct datasources later
             Portal.Datasources[dashboardId] = {}
             Meteor.clearTimeout @timeoutTag
-            @loadAllDatasource dashboardId,freeboard
-            @loadDatasourceByTime dashboardId,freeboard
+            # to exec loadAllDatasource function one second later in the firsttime
+            # 这里不可以立刻调用loadAllDatasource函数，其调用结果会被后面的return ""给覆盖了，所以只能延时调用来让return ""先执行
+            @loadDatasourceByTime dashboardId,freeboard,1
+            console.log "return empty freeboard html in the first time."
             return ""
         else
             compiledFreeboardHtml = @getCompiledFreeboardHtml dashboardId,freeboard,isFirstTime
+            console.log "compiled freeboard html is:"
+            console.log compiledFreeboardHtml
             contentBox = $ "#freeboard-panes-#{dashboardId}"
             contentBox.empty()
             contentBox.append compiledFreeboardHtml
     getCompiledFreeboardHtml: (dashboardId,freeboard,isFirstTime)->
         try
+            console.log "getting compiled freeboard html..."
             unless dashboardId
                 return ""
             if typeof freeboard == "string"
@@ -79,7 +85,9 @@ Portal.autoCompileTemplate =
                         reHtmls.push reHtml
             return reHtmls.join ""
         catch e
-            return "<div class = \"text-danger\">#{e.message}<br/>#{e.stack}</div>"
+            console.error "#{pane.title} 在获取编译后的FreeboardHtml时出错"
+            console.error "#{e.message} \n #{e.stack}"
+            return "";
     replaceParmsToValues: (dashboardId,datasource,content)->
         if content
             # 匹配所有{{}}对里面的内容（内容里面应该是写js脚本，不支持有回车换行的多行脚本）
@@ -127,7 +135,7 @@ Portal.autoCompileTemplate =
                         async: false
                         url: url
                         data: body
-                        timeout: Portal.autoCompileTemplate.ajaxTimeout
+                        timeout: (Portal.autoCompileTemplate.ajaxTimeout * 1000)
                         beforeSend: (XHR) ->
                             if headers?.length
                                 headers.forEach (header) ->
@@ -137,19 +145,18 @@ Portal.autoCompileTemplate =
                         error: () ->
                             Portal.Datasources[dashboardId][datasource.name] = null
                             console.error "loadAllDatasource faild:#{JSON.stringify(arguments)}"
-
-
-            # try to compile freeboard's js code and show the compiled html after all of the freeboard.datasources is loaded
-            @compiledFreeboard dashboardId,freeboard,false
-
         catch e
             console.error "loadAllDatasource faild:#{e.message}\r\n#{e.stack}"
         finally
+            # try to compile freeboard's js code and show the compiled html after all of the freeboard.datasources is loaded
+            @compiledFreeboard dashboardId,freeboard,false
             Portal.autoCompileTemplate.loadDatasourceByTime dashboardId,freeboard
-    loadDatasourceByTime: (dashboardId,freeboard)->
+    loadDatasourceByTime: (dashboardId,freeboard,refresh)->
         # get refresh property from freeboard,if nothing then apply the defalut refresh as 5 minute
-        refresh = if freeboard?.refresh then freeboard.refresh else 300
+        unless refresh
+            refresh = if freeboard?.refresh then freeboard.refresh else 300
         refresh = refresh*1000
+        console.log "loading datasource by time...#{refresh}"
         #启动定时器定时抓取数据源
         @timeoutTag = Meteor.setTimeout (->
             Portal.autoCompileTemplate.loadAllDatasource dashboardId,freeboard
