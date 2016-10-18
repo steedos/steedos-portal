@@ -25,6 +25,7 @@ Portal.autoCompileTemplate =
         unless dashboardId
             return ""
         if isFirstTime
+            $("body").addClass("loading")
             #declare a global variable named dashboardId in datasources so we can fetch the correct datasources later
             Portal.Datasources[dashboardId] = {}
             Meteor.clearTimeout @timeoutTag
@@ -39,6 +40,7 @@ Portal.autoCompileTemplate =
             contentBox.empty()
             console.log "will append the freeboard html to #freeboard-panes-#{dashboardId}"
             contentBox.append compiledFreeboardHtml
+            $("body").removeClass("loading")
     getCompiledFreeboardHtml: (dashboardId,freeboard,isFirstTime)->
         try
             console.log "getting compiled freeboard html..."
