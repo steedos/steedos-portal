@@ -3,6 +3,7 @@ checkUserSigned = (context, redirect) ->
 		FlowRouter.go '/steedos/sign-in';
 
 portalRoutes = FlowRouter.group
+	triggersEnter: [ checkUserSigned ],
 	prefix: '/portal',
 	name: 'portalRoutes'
 
