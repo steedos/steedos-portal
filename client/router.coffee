@@ -24,10 +24,4 @@ portalRoutes.route '/home',
 		Meteor.clearTimeout Portal.autoCompileTemplate.timeoutTag
 	]
 
-portalRoutes.route '/admin', 
-	action: (params, queryParams)->
-		if Meteor.userId()
-			BlazeLayout.render 'masterLayout',
-				main: "portal_admin_home"
-
 
