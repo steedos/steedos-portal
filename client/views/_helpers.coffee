@@ -142,6 +142,7 @@ Portal.autoCompileTemplate =
                                 headers.forEach (header) ->
                                     XHR.setRequestHeader header.name, header.value
                         success: (result) ->
+                            Portal.Events.callBackForAjax(datasource.name,Portal.Datasources[dashboardId][datasource.name],result)
                             Portal.Datasources[dashboardId][datasource.name] = result
                         error: () ->
                             Portal.Datasources[dashboardId][datasource.name] = null
