@@ -21,9 +21,5 @@ portalRoutes.route '/home',
 			BlazeLayout.render 'masterLayout',
 				main: "portal_home"
 
-	triggersExit:[(context, redirect) ->
-		console.log "portal home exiting"
-		Meteor.clearTimeout Portal.autoCompileTemplate.timeoutTag
-	]
 
 
