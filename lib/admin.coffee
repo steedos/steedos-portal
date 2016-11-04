@@ -6,7 +6,6 @@ db.portal_dashboards.adminConfig =
         {name: "modified"}
     ]
     selector: {space: -1}
-    routerAdmin: "/portal/admin"
 
 db.apps_auths.adminConfig = 
     icon: "globe"
@@ -17,7 +16,6 @@ db.apps_auths.adminConfig =
         {name: "modified"}
     ]
     selector: {space: -1}
-    routerAdmin: "/portal/admin"
 
 db.apps_auth_users.adminConfig = 
     icon: "globe"
@@ -29,7 +27,6 @@ db.apps_auth_users.adminConfig =
         {name: "modified"}
     ]
     selector: {space: -1}
-    routerAdmin: "/portal/admin"
 
 
 Meteor.startup ->
