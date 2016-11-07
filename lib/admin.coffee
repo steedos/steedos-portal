@@ -5,7 +5,7 @@ db.portal_dashboards.adminConfig =
         {name: "name"}
         {name: "modified"}
     ]
-    selector: {space: -1}
+    selector: Admin.selectorCheckSpaceAdmin
 
 db.apps_auths.adminConfig = 
     icon: "globe"
@@ -15,7 +15,7 @@ db.apps_auths.adminConfig =
         {name: "title"}
         {name: "modified"}
     ]
-    selector: {space: -1}
+    selector: Admin.selectorCheckSpaceAdmin
 
 db.apps_auth_users.adminConfig = 
     icon: "globe"
@@ -44,7 +44,5 @@ if Meteor.isClient
     Meteor.startup ->
         Tracker.autorun ->
             if Meteor.userId() and Session.get("spaceId")
-                AdminTables["portal_dashboards"]?.selector = {space: Session.get("spaceId")}
-                AdminTables["apps_auths"]?.selector = {space: Session.get("spaceId")}
                 AdminTables["apps_auth_users"]?.selector = {space: Session.get("spaceId"),user:Meteor.userId()}
 
