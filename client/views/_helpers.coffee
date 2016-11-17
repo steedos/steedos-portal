@@ -100,14 +100,15 @@ Portal.autoCompileTemplate =
                     n = n.replace('{{', '').replace('}}', '')
                     # 这里把脚本内容中datasources变量变成全局的Portal.Datasources
                     n = n.replace(/\bdatasources\b/g,"Portal.Datasources[\"#{dashboardId}\"]")
-                    return eval("(function(){return #{n}})()")
+                    result = eval("(function(){return #{n}})()")
+                    return result
                 catch e
                     # just console the error when catch error
                     # 这里整个catch中不可以调用t多语言函数，比如t("portal_freeboard_compiling_error")，因为会造成不断重复调用Portal.helpers.freeboardTemplate的死循环
                     # 这很可能是meteor1.2版本的bug，在1.4中应该已不存在这个问题
                     console.error "ajax datasource:#{datasource.name} 在编译请求内容脚本时出错:"
                     console.error "#{e.message}\r\n#{e.stack}"
-                    return n
+                    return ""
             )
             return content
         else
