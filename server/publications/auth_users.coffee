@@ -10,6 +10,7 @@ Meteor.publish 'apps_auth_users', (spaceId)->
 
     selector = 
         space: spaceId
+        user: @userId
 
     return db.apps_auth_users.find selector, 
         sort: 
