@@ -1,7 +1,7 @@
 {
-    "Steedos Portal": "门户",
+    "Steedos Portal": "个人工作平台",
 
-    "portal_admin_home": "门户设置",
+    "portal_admin_home": "个人工作平台设置",
     "portal_dashboard_settings": "面板设置", 
     "apps_auths_settings": "验证域设置",
     "apps_auth_users_settings": "域账户设置",
