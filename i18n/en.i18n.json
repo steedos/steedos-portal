@@ -31,6 +31,6 @@
     "portal_freeboard_compiling_ajax_content_error":"Throw some errors while compiling the ajax content.",
 
     "portal_dashboards_error_space_not_found": "The space is't found.",
-    "portal_dashboards_error_space_admins_only": "You are't the admin of the space.",
+    "portal_dashboards_error_space_admins_only": "You are't the admin of the space."
 
 }
