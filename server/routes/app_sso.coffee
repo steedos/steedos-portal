@@ -40,7 +40,10 @@ AppSSO =
 					apps_auth_user = Portal.GetAuthByName app.auth_name, app.space, user_id
 					if apps_auth_user
 						login_name = apps_auth_user.login_name
-						login_password = apps_auth_user.login_password
+						if apps_auth_user.is_encrypted
+							login_password = Steedos.decrypt(apps_auth_user.login_password, apps_auth_user.login_name, Portal.cryptIvForAuthUsers)
+						else
+							login_password = apps_auth_user.login_password
 					else
 						error_msg = "当前用户没有设置#{auth_name}域账户及密码"
 						login_name = ""
