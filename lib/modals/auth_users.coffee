@@ -62,6 +62,12 @@ db.apps_auth_users._simpleSchema = new SimpleSchema
 		autoform: 
 			type: "password",
 			order: 20
+
+	# is login_password encrypted
+	is_encrypted:
+		type: Boolean,
+		optional: true,
+		defaultValue: false
 		
 	created: 
 		type: Date,
@@ -85,6 +91,8 @@ db.apps_auth_users.attachSchema(db.apps_auth_users._simpleSchema)
 
 
 if Meteor.isServer
+
+	Portal.cryptIvForAuthUsers = "-auth-user201702"
 	
 	db.apps_auth_users.before.insert (userId, doc) ->
 		if !userId
@@ -95,6 +103,9 @@ if Meteor.isServer
 			throw new Meteor.Error(400, t("portal_dashboards_error_space_not_found"));
 
 		doc.user_name = db.users.findOne(doc.user).name
+
+		if doc.login_password
+			doc.login_password = Steedos.encrypt(doc.login_password, doc.login_name, Portal.cryptIvForAuthUsers);
 
 		doc.created_by = userId
 		doc.created = new Date()
@@ -118,6 +129,14 @@ if Meteor.isServer
 
 		modifier.$set.user_name = db.users.findOne(doc.user).name;
 
+		login_name = doc.login_name
+
+		if modifier.$set.login_name
+			login_name = modifier.$set.login_name
+
+		if modifier.$set.login_password
+			modifier.$set.login_password = Steedos.encrypt(modifier.$set.login_password, login_name, Portal.cryptIvForAuthUsers);
+
 		modifier.$set.modified_by = userId;
 		modifier.$set.modified = new Date();
 
@@ -134,4 +153,6 @@ if Meteor.isServer
 			throw new Meteor.Error(400, t("apps_auth_users_error_self_remove_only"));
 
 
-
+	db.apps_auth_users.after.findOne (userId, selector, options, doc)->
+		if doc?.login_password
+			doc.login_password = Steedos.decrypt(doc.login_password, doc.login_name, Portal.cryptIvForAuthUsers)
