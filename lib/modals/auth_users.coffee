@@ -106,6 +106,7 @@ if Meteor.isServer
 
 		if doc.login_password
 			doc.login_password = Steedos.encrypt(doc.login_password, doc.login_name, Portal.cryptIvForAuthUsers);
+			doc.is_encrypted = true
 
 		doc.created_by = userId
 		doc.created = new Date()
@@ -136,6 +137,7 @@ if Meteor.isServer
 
 		if modifier.$set.login_password
 			modifier.$set.login_password = Steedos.encrypt(modifier.$set.login_password, login_name, Portal.cryptIvForAuthUsers);
+			modifier.$set.is_encrypted = true
 
 		modifier.$set.modified_by = userId;
 		modifier.$set.modified = new Date();
@@ -154,5 +156,5 @@ if Meteor.isServer
 
 
 	db.apps_auth_users.after.findOne (userId, selector, options, doc)->
-		if doc?.login_password
+		if doc?.login_password and doc?.is_encrypted
 			doc.login_password = Steedos.decrypt(doc.login_password, doc.login_name, Portal.cryptIvForAuthUsers)
