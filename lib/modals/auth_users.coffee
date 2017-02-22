@@ -116,6 +116,8 @@ if Meteor.isServer
 
 		modifier.$set = modifier.$set || {};
 
+		modifier.$set.user_name = db.users.findOne(doc.user).name;
+
 		modifier.$set.modified_by = userId;
 		modifier.$set.modified = new Date();
 
