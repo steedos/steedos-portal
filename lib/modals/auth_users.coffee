@@ -68,6 +68,8 @@ db.apps_auth_users._simpleSchema = new SimpleSchema
 		type: Boolean,
 		optional: true,
 		defaultValue: false
+		autoform: 
+			type: "hidden"
 		
 	created: 
 		type: Date,
