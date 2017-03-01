@@ -45,11 +45,16 @@ AppSSO =
 						else
 							login_password = apps_auth_user.login_password
 					else
-						error_msg = "当前用户没有设置#{auth_name}域账户及密码"
+						# error_msg = "当前用户没有设置#{auth_name}域账户及密码"
 						login_name = ""
 						login_password = ""
 					app_script = app_script.replace reg_login_name, login_name
 					app_script = app_script.replace reg_login_password, login_password
+
+					reg_login_auths = /{{login_auths}}/g
+					login_auths = Portal.GetLoginAuths app.space, user_id
+					app_script = app_script.replace reg_login_auths, JSON.stringify(login_auths)
+
 					unless return_url
 						return_url = ""
 					# 当接口参数中提供了用于返回的return_url时，需要把脚本中return_url占位符替换成参数中的return_url
