@@ -67,9 +67,8 @@ db.apps_auth_users._simpleSchema = new SimpleSchema
 	is_encrypted:
 		type: Boolean,
 		optional: true,
-		defaultValue: false
 		autoform: 
-			type: "hidden"
+			omit: true
 		
 	created: 
 		type: Date,
