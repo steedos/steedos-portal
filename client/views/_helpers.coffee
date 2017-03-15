@@ -16,7 +16,11 @@ Portal.helpers =
 
 # 自动编译dashboard.freeboard方法集
 Portal.autoCompileTemplate =
-    timeoutTag:null
+    isDatasourceChanged:false
+    # 编译Freeboard脚本生成界面定时器
+    timeoutTagForPage:null
+    # 抓取Datasource定时器
+    timeoutTagForDS:null
     # proxyurl:"https://thingproxy.freeboard.io/fetch/"
     proxyurl:"/api/proxy?fetch="
     ajaxTimeout:1 #timeout seconds for ajax
@@ -28,7 +32,7 @@ Portal.autoCompileTemplate =
             $("body").addClass("loading")
             #declare a global variable named dashboardId in datasources so we can fetch the correct datasources later
             Portal.Datasources[dashboardId] = {}
-            Meteor.clearTimeout @timeoutTag
+            Meteor.clearTimeout @timeoutTagForDS
             # to exec loadAllDatasource function one second later in the firsttime
             # 这里不可以立刻调用loadAllDatasource函数，其调用结果会被后面的return ""给覆盖了，所以只能延时调用来让return ""先执行
             @loadDatasourceByTime dashboardId,freeboard,1
@@ -116,7 +120,7 @@ Portal.autoCompileTemplate =
     loadAllDatasource: (dashboardId,freeboard)->
         try
             console.log("trying to loadAllDatasource for dashboardId:#{dashboardId}");
-            Meteor.clearTimeout @timeoutTag
+            Meteor.clearTimeout @timeoutTagForDS
             unless dashboardId
                 return ""
             if typeof freeboard == "string"
@@ -161,7 +165,7 @@ Portal.autoCompileTemplate =
         refresh = refresh*1000
         console.log "loading datasource by time...#{refresh}"
         #启动定时器定时抓取数据源
-        @timeoutTag = Meteor.setTimeout (->
+        @timeoutTagForDS = Meteor.setTimeout (->
             Portal.autoCompileTemplate.loadAllDatasource dashboardId,freeboard
         ), refresh
     getDatasourceNamesFromHtml: (html)->
