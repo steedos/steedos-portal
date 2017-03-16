@@ -29,7 +29,6 @@ Portal.autoCompileTemplate =
         unless dashboardId
             return ""
         if isFirstTime
-            $("body").addClass("loading")
             #declare a global variable named dashboardId in datasources so we can fetch the correct datasources later
             Portal.Datasources[dashboardId] = {}
             Meteor.clearTimeout @timeoutTagForDS
@@ -44,7 +43,9 @@ Portal.autoCompileTemplate =
             contentBox.empty()
             console.log "will append the freeboard html to #freeboard-panes-#{dashboardId}"
             contentBox.append compiledFreeboardHtml
-            $("body").removeClass("loading")
+            @isDatasourceChanged = false
+            Meteor.clearTimeout @timeoutTagForPage
+            @loadPageByTime dashboardId,freeboard,2
     getCompiledFreeboardHtml: (dashboardId,freeboard,isFirstTime)->
         try
             console.log "getting compiled freeboard html..."
@@ -138,7 +139,7 @@ Portal.autoCompileTemplate =
                     url = if use_thingproxy then "#{Portal.autoCompileTemplate.proxyurl}#{window.encodeURIComponent(url)}" else "#{url}"
                     $.ajax
                         type: settings.method
-                        async: false
+                        async: true
                         url: url
                         data: body
                         timeout: (Portal.autoCompileTemplate.ajaxTimeout * 1000)
@@ -149,8 +150,8 @@ Portal.autoCompileTemplate =
                         success: (result) ->
                             Portal.Events.callBackForAjax(datasource.name,Portal.Datasources[dashboardId][datasource.name],result)
                             Portal.Datasources[dashboardId][datasource.name] = result
+                            Portal.autoCompileTemplate.isDatasourceChanged = true
                         error: () ->
-                            Portal.Datasources[dashboardId][datasource.name] = null
                             console.error "loadAllDatasource faild:#{JSON.stringify(arguments)}"
         catch e
             console.error "loadAllDatasource faild:#{e.message}\r\n#{e.stack}"
@@ -179,5 +180,15 @@ Portal.autoCompileTemplate =
             datasourceNames = []
         return _.uniq datasourceNames
 
-
+    loadPageByTime: (dashboardId,freeboard,refresh)->
+        refresh = refresh*1000
+        console.log "loading page by time...#{refresh}"
+        #启动定时器定时生成界面
+        @timeoutTagForPage = Meteor.setTimeout (->
+            if Portal.autoCompileTemplate.isDatasourceChanged
+                Portal.autoCompileTemplate.compiledFreeboard dashboardId,freeboard,false
+            else
+                Meteor.clearTimeout Portal.autoCompileTemplate.timeoutTagForPage
+                Portal.autoCompileTemplate.loadPageByTime dashboardId,freeboard,2
+        ), refresh
 
