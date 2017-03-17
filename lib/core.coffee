@@ -32,4 +32,6 @@ Portal.Datasources = {}
 # 绑定事件通常的写法为：<a href="..." onclick="Portal.Events.try_to_login()"></a>
 Portal.Events = {
 	callBackForAjax: () ->
+
+	callBackForAjaxError: () ->
 }

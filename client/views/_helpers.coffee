@@ -121,6 +121,8 @@ Portal.autoCompileTemplate =
     loadAllDatasource: (dashboardId,freeboard)->
         try
             console.log("trying to loadAllDatasource for dashboardId:#{dashboardId}");
+            # 初始化一个空数组存datasourceName 
+            Portal.Datasources[dashboardId]["loading_datasources"] = []
             Meteor.clearTimeout @timeoutTagForDS
             unless dashboardId
                 return ""
@@ -137,6 +139,10 @@ Portal.autoCompileTemplate =
                     body = Portal.autoCompileTemplate.replaceParmsToValues dashboardId,datasource,settings.body
                     url = Portal.autoCompileTemplate.replaceParmsToValues dashboardId,datasource,settings.url
                     url = if use_thingproxy then "#{Portal.autoCompileTemplate.proxyurl}#{window.encodeURIComponent(url)}" else "#{url}"
+                    # 存放dataso
+                    Portal.Datasources[dashboardId]["loading_datasources"].push(datasource.name)
+                    $("body").addClass("loading-header")
+
                     $.ajax
                         type: settings.method
                         async: true
@@ -152,7 +158,12 @@ Portal.autoCompileTemplate =
                             Portal.Datasources[dashboardId][datasource.name] = result
                             Portal.autoCompileTemplate.isDatasourceChanged = true
                         error: () ->
+                            Portal.Events.callBackForAjaxError(datasource.name)
                             console.error "loadAllDatasource faild:#{JSON.stringify(arguments)}"
+                        complete: () ->
+                            Portal.Datasources[dashboardId]["loading_datasources"] = _.without(Portal.Datasources[dashboardId]["loading_datasources"],datasource.name)
+                            if Portal.Datasources[dashboardId]["loading_datasources"].length == 0
+                                $("body").removeClass("loading-header")
         catch e
             console.error "loadAllDatasource faild:#{e.message}\r\n#{e.stack}"
         finally
