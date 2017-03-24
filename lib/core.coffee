@@ -38,13 +38,13 @@ Portal.Events = {
 
 if Meteor.isClient
 
-	# Portal在Steedos中的菜单
+	# Portal在steedos-admin中的菜单
 	Admin.addMenu 
 		_id: "portal"
 		title: "Steedos Portal"
 		icon: "ion ion-ios-albums-outline"
 		app: "portal"
-		sort: 10
+		sort: 40
 
 	Admin.addMenu 
 		_id: "portal_dashboards"
@@ -52,34 +52,5 @@ if Meteor.isClient
 		icon:"ion ion-ios-photos"
 		url: "/admin/view/portal_dashboards"
 		roles:["space_admin"]
-		sort: 20
-		parent: "portal"
-
-	Admin.addMenu 
-		_id: "apps_auths"
-		title: "apps_auths"
-		icon:"ion ion-aperture"
-		url: "/admin/view/apps_auths"
-		roles:["space_admin"]
-		sort: 30
-		parent: "portal"
-
-	Admin.addMenu 
-		_id: "apps_auth_users"
-		title: "apps_auth_users"
-		icon:"ion ion-ios-personadd"
-		url: "/admin/view/apps_auth_users"
-		onclick: ->
-			Modal.show("accounts_guide_modal")
-			return false
-		sort: 40
-		parent: "portal"
-
-	Admin.addMenu 
-		_id: "mail_domains"
-		title: "mail_domains"
-		icon:"ion ion-ios-email"
-		url: "/admin/view/mail_domains"
-		roles:["cloud_admin"]
-		sort: 50
+		sort: 10
 		parent: "portal"
