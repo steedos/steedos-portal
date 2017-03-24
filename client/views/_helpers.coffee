@@ -25,7 +25,6 @@ Portal.autoCompileTemplate =
     proxyurl:"/api/proxy?fetch="
     ajaxTimeout:1 #timeout seconds for ajax
     compiledFreeboard: (dashboardId,freeboard,isFirstTime)->
-        console.log "compiling freeboard...isFirstTime:#{isFirstTime},dashboardId:#{dashboardId}"
         unless dashboardId
             return ""
         if isFirstTime
@@ -35,20 +34,17 @@ Portal.autoCompileTemplate =
             # to exec loadAllDatasource function one second later in the firsttime
             # 这里不可以立刻调用loadAllDatasource函数，其调用结果会被后面的return ""给覆盖了，所以只能延时调用来让return ""先执行
             @loadDatasourceByTime dashboardId,freeboard,1
-            console.log "return empty freeboard html in the first time."
             return ""
         else
             compiledFreeboardHtml = @getCompiledFreeboardHtml dashboardId,freeboard,isFirstTime
             contentBox = $ "#freeboard-panes-#{dashboardId}"
             contentBox.empty()
-            console.log "will append the freeboard html to #freeboard-panes-#{dashboardId}"
             contentBox.append compiledFreeboardHtml
             @isDatasourceChanged = false
             Meteor.clearTimeout @timeoutTagForPage
             @loadPageByTime dashboardId,freeboard,2
     getCompiledFreeboardHtml: (dashboardId,freeboard,isFirstTime)->
         try
-            console.log "getting compiled freeboard html..."
             unless dashboardId
                 return ""
             if typeof freeboard == "string"
@@ -120,7 +116,6 @@ Portal.autoCompileTemplate =
             return ""
     loadAllDatasource: (dashboardId,freeboard)->
         try
-            console.log("trying to loadAllDatasource for dashboardId:#{dashboardId}");
             # 初始化一个空数组存datasourceName 
             Portal.Datasources[dashboardId]["loading_datasources"] = []
             Meteor.clearTimeout @timeoutTagForDS
@@ -175,7 +170,6 @@ Portal.autoCompileTemplate =
         unless refresh
             refresh = if freeboard?.refresh then freeboard.refresh else 300
         refresh = refresh*1000
-        console.log "loading datasource by time...#{refresh}"
         #启动定时器定时抓取数据源
         @timeoutTagForDS = Meteor.setTimeout (->
             Portal.autoCompileTemplate.loadAllDatasource dashboardId,freeboard
@@ -193,7 +187,6 @@ Portal.autoCompileTemplate =
 
     loadPageByTime: (dashboardId,freeboard,refresh)->
         refresh = refresh*1000
-        console.log "loading page by time...#{refresh}"
         #启动定时器定时生成界面
         @timeoutTagForPage = Meteor.setTimeout (->
             if Portal.autoCompileTemplate.isDatasourceChanged

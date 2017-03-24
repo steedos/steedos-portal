@@ -6,7 +6,6 @@ Meteor.publish 'apps_auth_users', (spaceId)->
     unless spaceId
       return this.ready()
 
-    console.log '[publish] apps_auth_users for space.'
 
     selector = 
         space: spaceId
