@@ -35,22 +35,3 @@ Portal.Events = {
 
 	callBackForAjaxError: () ->
 }
-
-if Meteor.isClient
-
-	# Portal在steedos-admin中的菜单
-	Admin.addMenu 
-		_id: "portal"
-		title: "Steedos Portal"
-		icon: "ion ion-ios-albums-outline"
-		app: "portal"
-		sort: 40
-
-	Admin.addMenu 
-		_id: "portal_dashboards"
-		title: "portal_dashboards"
-		icon:"ion ion-ios-photos"
-		url: "/admin/view/portal_dashboards"
-		roles:["space_admin"]
-		sort: 10
-		parent: "portal"

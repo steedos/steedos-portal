@@ -71,6 +71,7 @@ Package.onUse(function(api) {
     api.addFiles('client/router.coffee', 'client');
     api.addFiles('client/subscribe.coffee', 'client');
 
+    api.addFiles('client/admin_menu.coffee','client');
 
     api.addFiles('server/publications/portal_dashboards.coffee', 'server');
     api.addFiles('server/publications/auths.coffee', 'server');
