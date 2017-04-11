@@ -23,7 +23,7 @@ Portal.autoCompileTemplate =
     timeoutTagForDS:null
     # proxyurl:"https://thingproxy.freeboard.io/fetch/"
     proxyurl:"/api/proxy?fetch="
-    ajaxTimeout:30 #timeout seconds for ajax
+    ajaxTimeout:60 #timeout seconds for ajax
     compiledFreeboard: (dashboardId,freeboard,isFirstTime)->
         unless dashboardId
             return ""
