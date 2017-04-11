@@ -23,7 +23,7 @@ Portal.autoCompileTemplate =
     timeoutTagForDS:null
     # proxyurl:"https://thingproxy.freeboard.io/fetch/"
     proxyurl:"/api/proxy?fetch="
-    ajaxTimeout:1 #timeout seconds for ajax
+    ajaxTimeout:30 #timeout seconds for ajax
     compiledFreeboard: (dashboardId,freeboard,isFirstTime)->
         unless dashboardId
             return ""
@@ -137,7 +137,6 @@ Portal.autoCompileTemplate =
                     # 存放dataso
                     Portal.Datasources[dashboardId]["loading_datasources"].push(datasource.name)
                     $("body").addClass("loading-header")
-
                     $.ajax
                         type: settings.method
                         async: true
