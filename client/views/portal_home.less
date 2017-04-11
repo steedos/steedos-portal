@@ -48,7 +48,7 @@
 					line-height: 50px;
 				}
 				.widget-title{
-					width: 100%;
+					max-width: 100%;
 					white-space: nowrap;
 					text-overflow: ellipsis;
 					overflow: hidden;
@@ -60,9 +60,15 @@
 			.widget-body{
 				clear:both;
 				&.is-empty{
+					white-space: nowrap;
+					text-overflow: ellipsis;
+					overflow: hidden;
 					opacity: 0.7;
 				}
 				.is-empty{
+					white-space: nowrap;
+					text-overflow: ellipsis;
+					overflow: hidden;
 					opacity: 0.7;
 				}
 			}
