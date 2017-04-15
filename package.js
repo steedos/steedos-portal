@@ -63,6 +63,10 @@ Package.onUse(function(api) {
     api.addFiles('lib/modals/auth_users.coffee');
     api.addFiles('lib/admin.coffee');
 
+    api.addFiles('client/layouts/header.html', 'client');
+    api.addFiles('client/layouts/header.coffee', 'client');
+    api.addFiles('client/layouts/header.less', 'client');
+
     api.addFiles('client/layouts/master.html', 'client');
     api.addFiles('client/layouts/master.coffee', 'client');
 
