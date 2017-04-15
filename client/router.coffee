@@ -16,7 +16,7 @@ portalRoutes.route '/',
 portalRoutes.route '/home',
 	action: (params, queryParams)->
 		if Meteor.userId()
-			BlazeLayout.render 'masterLayout',
+			BlazeLayout.render 'portalLayout',
 				main: "portal_home"
 
 
