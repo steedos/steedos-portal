@@ -37,6 +37,10 @@ AppSSO =
 					# 这里需要把脚本中{{login_name}}及{{login_password}}替换成当前用户在域账户（即apps_auth_user）中设置的域账户及密码
 					reg_login_name = /{{login_name}}/g
 					reg_login_password = /{{login_password}}/g
+					reg_steedos_token = /{{steedos_token}}/g
+					
+					steedos_token = "X-STEEDOS-WEB-ID=#{user.steedos_id}&X-STEEDOS-AUTHTOKEN=#{Steedos.getSteedosToken(app_id, user_id, auth_token)}"
+
 					apps_auth_user = Portal.GetAuthByName app.auth_name, app.space, user_id
 					if apps_auth_user
 						login_name = apps_auth_user.login_name
@@ -48,9 +52,11 @@ AppSSO =
 						# error_msg = "当前用户没有设置#{auth_name}域账户及密码"
 						login_name = ""
 						login_password = ""
+
 					app_script = app_script.replace reg_login_name, login_name
 					app_script = app_script.replace reg_login_password, login_password
-
+					app_script = app_script.replace reg_steedos_token, steedos_token
+					
 					reg_login_auths = /{{login_auths}}/g
 					login_auths = Portal.GetLoginAuths app.space, user_id
 					app_script = app_script.replace reg_login_auths, JSON.stringify(login_auths)
@@ -69,7 +75,6 @@ AppSSO =
 		else
 			error_msg = "当前应用不存在或已被删除"
 			app_script = ""
-
 
 		return @writeResponse res, 200, """
 			<!DOCTYPE html>

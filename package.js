@@ -50,6 +50,7 @@ Package.onUse(function(api) {
 
     api.use('steedos:admin');
     api.use('steedos:emailjs');
+    api.use('steedos:base');
 
 
 
