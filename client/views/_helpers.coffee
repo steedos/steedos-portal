@@ -74,8 +74,8 @@ Portal.autoCompileTemplate =
                                     # just show the error when catch error
                                     # 这里整个catch中不可以调用t多语言函数，比如t("portal_freeboard_compiling_error")，因为会造成不断重复调用Portal.helpers.freeboardTemplate的死循环
                                     # 这很可能是meteor1.2版本的bug，在1.4中应该已不存在这个问题
-                                    console.error "#{pane.title} 在编译脚本时出错"
-                                    console.error "#{e.message} <br/> #{e.stack}"
+                                    # console.error "#{pane.title} 在编译脚本时出错"
+                                    # console.error "#{e.message} <br/> #{e.stack}"
                                     widgetContentHtml = ""
                                 tempWidgetHtml = "<div class = \"#{widgetClassname}\">#{widgetContentHtml}</div>"
                             widgetHtmls.push tempWidgetHtml
@@ -87,8 +87,8 @@ Portal.autoCompileTemplate =
                         reHtmls.push reHtml
             return reHtmls.join ""
         catch e
-            console.error "#{pane.title} 在获取编译后的FreeboardHtml时出错"
-            console.error "#{e.message} \n #{e.stack}"
+            # console.error "#{pane.title} 在获取编译后的FreeboardHtml时出错"
+            # console.error "#{e.message} \n #{e.stack}"
             return "";
     replaceParmsToValues: (dashboardId,datasource,content)->
         if content
@@ -107,8 +107,8 @@ Portal.autoCompileTemplate =
                     # just console the error when catch error
                     # 这里整个catch中不可以调用t多语言函数，比如t("portal_freeboard_compiling_error")，因为会造成不断重复调用Portal.helpers.freeboardTemplate的死循环
                     # 这很可能是meteor1.2版本的bug，在1.4中应该已不存在这个问题
-                    console.error "ajax datasource:#{datasource.name} 在编译请求内容脚本时出错:"
-                    console.error "#{e.message}\r\n#{e.stack}"
+                    # console.error "ajax datasource:#{datasource.name} 在编译请求内容脚本时出错:"
+                    # console.error "#{e.message}\r\n#{e.stack}"
                     return ""
             )
             return content
@@ -153,13 +153,13 @@ Portal.autoCompileTemplate =
                             Portal.autoCompileTemplate.isDatasourceChanged = true
                         error: () ->
                             Portal.Events.callBackForAjaxError(datasource.name)
-                            console.error "loadAllDatasource faild:#{JSON.stringify(arguments)}"
+                            # console.error "loadAllDatasource faild:#{JSON.stringify(arguments)}"
                         complete: () ->
                             Portal.Datasources[dashboardId]["loading_datasources"] = _.without(Portal.Datasources[dashboardId]["loading_datasources"],datasource.name)
                             if Portal.Datasources[dashboardId]["loading_datasources"].length == 0
                                 $("body").removeClass("loading-header")
         catch e
-            console.error "loadAllDatasource faild:#{e.message}\r\n#{e.stack}"
+            # console.error "loadAllDatasource faild:#{e.message}\r\n#{e.stack}"
         finally
             # try to compile freeboard's js code and show the compiled html after all of the freeboard.datasources is loaded
             @compiledFreeboard dashboardId,freeboard,false
