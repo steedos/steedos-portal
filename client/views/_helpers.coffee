@@ -1,4 +1,10 @@
 Portal.helpers =
+    desktopVer: ->
+        if Steedos.isNode()
+            return nw.App.manifest.version;
+
+        return false
+
     Dashboard: ->
         spaceId = Session.get("spaceId")
         dashboardId = Session.get("dashboardId")
@@ -7,6 +13,10 @@ Portal.helpers =
         else
             #fetch the first created dashboard as the dashboard
             dashboard = db.portal_dashboards.findOne({space:spaceId},{sort:{created:1}})
+            # 新版客户端使用新版首页
+            if Portal.helpers.desktopVer() && (Portal.helpers.desktopVer().to_float() > 4.0)
+                dashboard = db.portal_dashboards.findOne({space:spaceId},{sort:{created:-1}})
+            
             if dashboard
                 Session.set("dashboardId", dashboard._id)
             return dashboard;
