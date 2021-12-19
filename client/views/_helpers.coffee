@@ -11,11 +11,12 @@ Portal.helpers =
         if dashboardId
             return db.portal_dashboards.findOne({_id:dashboardId})
         else
-            #fetch the first created dashboard as the dashboard
-            dashboard = db.portal_dashboards.findOne({space:spaceId},{sort:{created:1}})
             # 新版客户端使用新版首页
             if Portal.helpers.desktopVer() && (Portal.helpers.desktopVer().to_float() > 4.0)
                 dashboard = db.portal_dashboards.findOne({space:spaceId},{sort:{created:-1}})
+            else
+                #fetch the first created dashboard as the dashboard
+                dashboard = db.portal_dashboards.findOne({space:spaceId},{sort:{created:1}})
             
             if dashboard
                 Session.set("dashboardId", dashboard._id)
