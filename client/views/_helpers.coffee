@@ -49,17 +49,18 @@ Portal.helpers =
 		if (nw.App.manifest.version.to_float() > 4.0)
 			if (!Session.get("rfiamLoginTime"))
 				Session.set("rfiamLoginTime",new Date().getTime());
+				console.log("first set rfiamLoginTime----: ", Session.get("rfiamLoginTime"))
 			else
 				timeSpent = new Date().getTime - Session.get("rfiamLoginTime");
 				# 4小时
-				time = 3 * 60 * 60 * 1000;
+				time = 4.1 * 60 * 60 * 1000;
 				
 				if (timeSpent > time) || ((timeSpent - time) > 0) 
 					window.location = Portal.helpers.rfiamGzptURL();
 					console.log("登录超时，回到登录页！");
 				else
 					Session.set("rfiamLoginTime",new Date().getTime());
-	
+					console.log("update rfiamLoginTime----: ", Session.get("rfiamLoginTime"))
 	iframeGzptReload: (iframeId)->
 		# 客户端执行
 		if !Steedos.isNode()
