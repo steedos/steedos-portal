@@ -51,7 +51,7 @@ Portal.helpers =
 				Session.set("rfiamLoginTime",new Date().getTime());
 				console.log("first set rfiamLoginTime----: ", Session.get("rfiamLoginTime"))
 			else
-				timeSpent = new Date().getTime - Session.get("rfiamLoginTime");
+				timeSpent = new Date().getTime() - Session.get("rfiamLoginTime");
 				# 4小时
 				time = 4.1 * 60 * 60 * 1000;
 				
