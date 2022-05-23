@@ -53,7 +53,7 @@ Portal.helpers =
 			else
 				timeSpent = new Date().getTime() - Session.get("rfiamLoginTime");
 				# 4小时
-				time = 4.1 * 60 * 60 * 1000;
+				time = 4 * 60 * 60 * 1000;
 				
 				if (timeSpent > time) || ((timeSpent - time) > 0) 
 					window.location = Portal.helpers.rfiamGzptURL();
