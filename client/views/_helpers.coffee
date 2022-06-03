@@ -39,8 +39,15 @@ Portal.helpers =
 
 		if !Steedos.isNode()
 			return;
-		
-		return nw?.App?.manifest?.main;
+
+		if (nw.App.manifest.version.to_float() > 4.0)
+			url = "https://rfiam.cnpc/"
+			if(nw.App.manifest.version.to_float() > 4.2)
+				url = "https://fssh.rfiam.cnpc/"
+
+			return url
+
+		return;
 	
 	rfiamLogin: ->
 		if !Steedos.isNode()
