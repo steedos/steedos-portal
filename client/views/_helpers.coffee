@@ -63,7 +63,7 @@ Portal.helpers =
 				time = 4 * 60 * 60 * 1000;
 				
 				if (timeSpent > time) || ((timeSpent - time) > 0) 
-					window.location = Portal.helpers.rfiamGzptURL();
+					window.location = nw?.App?.manifest?.main;
 					console.log("登录超时，回到登录页！");
 				else
 					Session.set("rfiamLoginTime",new Date().getTime());
