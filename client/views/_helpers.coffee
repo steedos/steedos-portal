@@ -62,12 +62,11 @@ Portal.helpers =
 				# 4小时
 				time = 4 * 60 * 60 * 1000;
 				
-				if (timeSpent > time) || ((timeSpent - time) > 0) 
-					window.location = nw?.App?.manifest?.main;
+				if (timeSpent > time) || ((timeSpent - time) > 0)
 					console.log("登录超时，回到登录页！");
-				else
-					Session.set("rfiamLoginTime",new Date().getTime());
-					console.log("update rfiamLoginTime----: ", Session.get("rfiamLoginTime"))
+					window.location = nw?.App?.manifest?.main;
+					# Session.set("rfiamLoginTime",new Date().getTime());
+					# console.log("update rfiamLoginTime----: ", Session.get("rfiamLoginTime"))
 	iframeGzptReload: (iframeId)->
 		# 客户端执行
 		if !Steedos.isNode()
