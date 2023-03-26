@@ -7,7 +7,7 @@ Template.portalHeader.events
 		Steedos.showHelp();
 
 	'click .fssh-home-link': (event) ->
-		openUrl = "http://www.fssh.petrochina/Pages/default.aspx"
+		openUrl = "https://fssh.eip.cnpc/Pages/default.aspx"
 		if Steedos.isNode()
 			exec = nw.require('child_process').exec
 			cmd = "start iexplore.exe \"" + openUrl + "\""
